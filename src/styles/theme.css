@@ -1,0 +1,130 @@
+:root {
+  /* Colors */
+  --tour-overlay-bg: rgba(0, 0, 0, 0.5);
+  --tour-tooltip-bg: #ffffff;
+  --tour-tooltip-border: #e5e7eb;
+  --tour-tooltip-text: #1f2937;
+  --tour-tooltip-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  /* Spacing */
+  --tour-tooltip-padding: 1rem;
+  --tour-tooltip-gap: 0.5rem;
+  
+  /* Border */
+  --tour-tooltip-radius: 0.5rem;
+  --tour-tooltip-border-width: 1px;
+  
+  /* Animation */
+  --tour-tooltip-transition: all 0.2s ease-in-out;
+}
+
+/* Dark mode variables */
+.dark {
+  --tour-tooltip-bg: #1f2937;
+  --tour-tooltip-border: #374151;
+  --tour-tooltip-text: #f9fafb;
+}
+
+/* Base tooltip styles */
+.tour-tooltip {
+  background-color: var(--tour-tooltip-bg);
+  border: 1px solid var(--tour-tooltip-border);
+  border-radius: var(--tour-tooltip-radius);
+  box-shadow: var(--tour-tooltip-shadow);
+  color: var(--tour-tooltip-text);
+  padding: var(--tour-tooltip-padding);
+  transition: var(--tour-tooltip-transition);
+  max-width: 320px;
+}
+
+/* Tooltip arrow */
+.tour-tooltip::before {
+  content: '';
+  position: absolute;
+  width: 0.75rem;
+  height: 0.75rem;
+  background-color: var(--tour-tooltip-bg);
+  border: var(--tour-tooltip-border-width) solid var(--tour-tooltip-border);
+  transform: rotate(45deg);
+}
+
+/* Tooltip arrow positions */
+.tour-tooltip[data-placement="top"]::before {
+  bottom: -0.375rem;
+  border-right: none;
+  border-bottom: none;
+}
+
+.tour-tooltip[data-placement="bottom"]::before {
+  top: -0.375rem;
+  border-left: none;
+  border-top: none;
+}
+
+.tour-tooltip[data-placement="left"]::before {
+  right: -0.375rem;
+  border-top: none;
+  border-right: none;
+}
+
+.tour-tooltip[data-placement="right"]::before {
+  left: -0.375rem;
+  border-bottom: none;
+  border-left: none;
+}
+
+/* Button styles */
+.tour-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--tour-tooltip-transition);
+}
+
+.tour-button-primary {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.tour-button-primary:hover {
+  background-color: #2563eb;
+}
+
+.tour-button-secondary {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.tour-button-secondary:hover {
+  background-color: #e5e7eb;
+}
+
+.dark .tour-button-secondary {
+  background-color: #374151;
+  color: #f3f4f6;
+}
+
+.dark .tour-button-secondary:hover {
+  background-color: #4b5563;
+}
+
+/* Overlay styles */
+.tour-overlay {
+  background-color: var(--tour-overlay-bg);
+  backdrop-filter: blur(2px);
+}
+
+/* Highlight styles */
+.tour-highlight {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.dark .tour-highlight {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+} 
