@@ -27,6 +27,39 @@ export const Tour: React.FC<TourProps> = ({
   const [targetElement, setTargetElement] = useState<Element | null>(null);
 
   useEffect(() => {
+    if (isActive) {
+      // Announce tour start to screen readers
+      const announcement = document.createElement('div');
+      announcement.setAttribute('role', 'status');
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.setAttribute('aria-atomic', 'true');
+      announcement.className = 'sr-only';
+      announcement.textContent = 'Tour started. Use arrow keys to navigate between steps.';
+      document.body.appendChild(announcement);
+      
+      // Clean up announcement after a delay
+      setTimeout(() => {
+        document.body.removeChild(announcement);
+      }, 3000);
+
+      return () => {
+        // Announce tour end to screen readers
+        const endAnnouncement = document.createElement('div');
+        endAnnouncement.setAttribute('role', 'status');
+        endAnnouncement.setAttribute('aria-live', 'polite');
+        endAnnouncement.setAttribute('aria-atomic', 'true');
+        endAnnouncement.className = 'sr-only';
+        endAnnouncement.textContent = 'Tour ended.';
+        document.body.appendChild(endAnnouncement);
+        
+        setTimeout(() => {
+          document.body.removeChild(endAnnouncement);
+        }, 3000);
+      };
+    }
+  }, [isActive]);
+
+  useEffect(() => {
     if (!isActive) return;
 
     const currentStepData = steps[currentStep];

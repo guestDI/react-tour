@@ -63,8 +63,25 @@ export const Spotlight: React.FC<SpotlightProps> = ({
     ? { className: 'tour-highlight' } 
     : highlightTarget;
 
+  // Get the target element's accessible name or role
+  const targetLabel = targetElement.getAttribute('aria-label') || 
+                     targetElement.getAttribute('aria-labelledby') ||
+                     targetElement.getAttribute('title') ||
+                     targetElement.getAttribute('role') ||
+                     'element';
+
   return (
     <>
+      {/* Status announcements for screen readers */}
+      <div 
+        role="status" 
+        aria-live="polite" 
+        className="sr-only"
+        aria-atomic="true"
+      >
+        {`Tour step: ${targetLabel}. ${content}`}
+      </div>
+
       <div
         ref={overlayRef}
         className={clsx('tour-overlay fixed inset-0 z-50', overlayClassName)}
@@ -72,6 +89,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({
           clipPath: `path('M0 0H100%V100%H0V0z M${rect.left} ${rect.top}H${rect.right}V${rect.bottom}H${rect.left}V${rect.top}z')`,
         }}
         role="presentation"
+        aria-hidden="true"
       />
       {highlightTarget && (
         <div
@@ -86,6 +104,8 @@ export const Spotlight: React.FC<SpotlightProps> = ({
             width: rect.width + 8,
             height: rect.height + 8,
           }}
+          role="presentation"
+          aria-hidden="true"
         />
       )}
       <div
@@ -93,16 +113,28 @@ export const Spotlight: React.FC<SpotlightProps> = ({
         style={floatingStyles}
         className={clsx('tour-tooltip z-50', tooltipClassName)}
         role="dialog"
-        aria-label="Tour step"
+        aria-modal="true"
+        aria-labelledby="tour-step-title"
+        aria-describedby="tour-step-content"
         data-placement={placement}
       >
-        <div className="mb-4">{content}</div>
-        <div className={clsx('flex justify-between items-center gap-2', buttonContainerClassName)}>
+        <div id="tour-step-title" className="sr-only">
+          {`Tour Step: ${targetLabel}`}
+        </div>
+        <div id="tour-step-content" className="mb-4">
+          {content}
+        </div>
+        <div 
+          className={clsx('flex justify-between items-center gap-2', buttonContainerClassName)}
+          role="toolbar"
+          aria-label="Tour navigation"
+        >
           <div className="flex gap-2">
             {!isFirstStep && (
               <button
                 onClick={onBack}
                 className={clsx('tour-button tour-button-secondary', buttonClassName)}
+                aria-label="Go to previous step"
               >
                 Back
               </button>
@@ -110,6 +142,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({
             <button
               onClick={onSkip}
               className={clsx('tour-button tour-button-secondary', buttonClassName)}
+              aria-label="Skip tour"
             >
               Skip
             </button>
@@ -117,10 +150,20 @@ export const Spotlight: React.FC<SpotlightProps> = ({
           <button
             onClick={isLastStep ? onComplete : onNext}
             className={clsx('tour-button tour-button-primary', buttonClassName)}
+            aria-label={isLastStep ? "Complete tour" : "Go to next step"}
           >
             {isLastStep ? 'Done' : 'Next'}
           </button>
         </div>
+      </div>
+
+      {/* Navigation instructions for screen readers */}
+      <div 
+        role="complementary" 
+        aria-label="Tour navigation instructions" 
+        className="sr-only"
+      >
+        Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
       </div>
     </>
   );
