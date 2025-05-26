@@ -1,32 +1,29 @@
-# React Tour Guide
+# Product Tour Component
 
-A flexible and accessible React component library for creating guided product tours in your application.
+A flexible and accessible product tour component for React applications.
 
 ## Features
 
-- 🎯 Spotlight effect with customizable positioning
-- ⌨️ Full keyboard navigation support
-- 🎨 Themeable with CSS variables and Tailwind classes
-- 🌙 Dark mode support
-- ♿ Accessibility features
-- ⏳ Async step support
-- 🎭 React Portal for tooltip rendering
-- 📱 Responsive design
+- Interactive step-by-step guided tours
+- Customizable styling and animations
+- Keyboard navigation support
+- Screen reader accessibility
+- Dark mode support
+- High contrast mode support
+- Reduced motion support
 
 ## Installation
 
 ```bash
-npm install react-tour-guide
+npm install @your-org/product-tour
 # or
-yarn add react-tour-guide
-# or
-pnpm add react-tour-guide
+yarn add @your-org/product-tour
 ```
 
-## Quick Start
+## Basic Usage
 
 ```tsx
-import { TourProvider, Tour, useTour } from 'react-tour-guide';
+import { TourProvider, Tour, useTour } from '@your-org/product-tour';
 
 const steps = [
   {
@@ -45,63 +42,56 @@ function App() {
   return (
     <TourProvider steps={steps}>
       <YourApp />
-      <Tour />
     </TourProvider>
   );
 }
 
 function YourApp() {
   const { start } = useTour();
-
+  
   return (
-    <button onClick={start}>
-      Start Tour
-    </button>
+    <>
+      <button onClick={start}>Start Tour</button>
+      <Tour />
+    </>
   );
 }
 ```
 
 ## API Reference
 
-### TourProvider
-
-The main provider component that manages the tour state.
+### TourProvider Props
 
 ```tsx
-<TourProvider
-  steps={TourStep[]}
-  defaultActive={boolean}
-  onComplete={() => void}
-  onSkip={() => void}
->
-  {children}
-</TourProvider>
-```
+interface TourProviderProps {
+  steps: TourStep[];
+  children: React.ReactNode;
+  defaultActive?: boolean;
+  onComplete?: () => void;
+  onSkip?: () => void;
+}
 
-### useTour Hook
-
-A hook that provides tour controls and state.
-
-```tsx
-const {
-  start,    // Start the tour
-  stop,     // Stop the tour
-  next,     // Go to next step
-  back,     // Go to previous step
-  skip,     // Skip the tour
-  currentStep, // Current step index
-  isActive, // Whether tour is active
-} = useTour();
-```
-
-### TourStep Type
-
-```tsx
 interface TourStep {
   selector: string;      // CSS selector for target element
   content: React.ReactNode; // Content to display in tooltip
   placement?: 'top' | 'bottom' | 'left' | 'right'; // Tooltip placement
   waitFor?: () => Promise<void>; // Optional async function to wait for element
+}
+```
+
+### Tour Component Props
+
+```tsx
+interface TourProps {
+  className?: string;        // Root container class
+  overlayClassName?: string; // Overlay background class
+  tooltipClassName?: string; // Tooltip container class
+  buttonClassName?: string;  // Button classes
+  buttonContainerClassName?: string; // Button container class
+  highlightTarget?: boolean | {      // Target element highlight
+    className?: string;              // Custom highlight class
+    style?: React.CSSProperties;     // Custom highlight styles
+  };
 }
 ```
 
@@ -141,11 +131,34 @@ You can customize the appearance using Tailwind classes through the `Tour` compo
 <Tour
   tooltipClassName="!bg-purple-100 !border-purple-300 !text-purple-900"
   buttonClassName="!bg-purple-500 !text-white hover:!bg-purple-600"
-  overlayClassName="!bg-black/60 backdrop-blur-sm"
+  overlayClassName="!bg-black/40" // Semi-transparent overlay
 />
 ```
 
-### 3. Custom Classes
+### 3. Overlay and Blur Effects
+
+The overlay can be customized with or without blur effects:
+
+```tsx
+// Basic overlay without blur
+<Tour
+  overlayClassName="!bg-black/40"
+/>
+
+// Overlay with blur effect
+<Tour
+  overlayClassName="!bg-black/40 tour-overlay-blur"
+/>
+
+// Overlay with partial blur (only non-spotlighted areas are blurred)
+<Tour
+  overlayClassName="!bg-black/40 tour-overlay-partial-blur"
+/>
+```
+
+The partial blur effect creates a spotlight effect where only the non-spotlighted areas are blurred, making the highlighted element stand out even more. This is particularly useful when you want to maintain context while focusing attention on specific elements.
+
+### 4. Custom Classes
 
 You can also use your own CSS classes by extending the default ones:
 
@@ -157,36 +170,6 @@ You can also use your own CSS classes by extending the default ones:
   /* Add your custom styles */
   background: linear-gradient(to right, #4f46e5, #7c3aed);
 }
-```
-
-### Available Style Props
-
-```tsx
-interface TourProps {
-  className?: string;        // Root container class
-  overlayClassName?: string; // Overlay background class
-  tooltipClassName?: string; // Tooltip container class
-  buttonClassName?: string;  // Button classes
-  buttonContainerClassName?: string; // Button container class
-  highlightTarget?: boolean | {      // Target element highlight
-    className?: string;              // Custom highlight class
-    style?: React.CSSProperties;     // Custom highlight styles
-  };
-}
-```
-
-### Example Usage
-
-```tsx
-<Tour
-  tooltipClassName="!bg-purple-100 !border-purple-300 !text-purple-900"
-  buttonClassName="!bg-purple-500 !text-white hover:!bg-purple-600"
-  overlayClassName="!bg-black/60 backdrop-blur-sm"
-  buttonContainerClassName="!border-t !border-purple-200 !pt-4 !mt-4"
-  highlightTarget={{
-    className: '!bg-purple-500/10 !border-purple-500/30 !shadow-purple-500/20'
-  }}
-/>
 ```
 
 ### Default Highlight Styles
@@ -214,6 +197,8 @@ The library provides default highlight styles that can be customized:
 - ARIA attributes for screen readers
 - Focus management
 - Semantic HTML structure
+- High contrast mode support
+- Reduced motion support
 
 ## Contributing
 

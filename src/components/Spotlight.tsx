@@ -70,6 +70,61 @@ export const Spotlight: React.FC<SpotlightProps> = ({
                      targetElement.getAttribute('role') ||
                      'element';
 
+  const isPartialBlur = overlayClassName?.includes('tour-overlay-partial-blur');
+
+  // Create a unique ID for the target element if it doesn't have one
+  useEffect(() => {
+    if (isPartialBlur && !targetElement.id) {
+      const uniqueId = `tour-target-${Math.random().toString(36).substr(2, 9)}`;
+      targetElement.id = uniqueId;
+      return () => {
+        targetElement.removeAttribute('id');
+      };
+    }
+  }, [targetElement, isPartialBlur]);
+
+  // Create SVG mask for partial blur
+  const createSpotlightMask = () => {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const mask = document.createElementNS('http://www.w3.org/2000/svg', 'mask');
+    mask.setAttribute('id', 'spotlight');
+    
+    // Create a white background (this will be blurred)
+    const backgroundRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    backgroundRect.setAttribute('width', '100%');
+    backgroundRect.setAttribute('height', '100%');
+    backgroundRect.setAttribute('fill', 'white');
+    
+    // Create a black hole for the spotlight (this will be clear)
+    const spotlightRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    spotlightRect.setAttribute('x', rect.left.toString());
+    spotlightRect.setAttribute('y', rect.top.toString());
+    spotlightRect.setAttribute('width', rect.width.toString());
+    spotlightRect.setAttribute('height', rect.height.toString());
+    spotlightRect.setAttribute('fill', 'black');
+    
+    mask.appendChild(backgroundRect);
+    mask.appendChild(spotlightRect);
+    defs.appendChild(mask);
+    svg.appendChild(defs);
+    
+    // Create the actual overlay with the mask
+    const overlayRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    overlayRect.setAttribute('width', '100%');
+    overlayRect.setAttribute('height', '100%');
+    overlayRect.setAttribute('fill', 'white');
+    overlayRect.setAttribute('mask', 'url(#spotlight)');
+    svg.appendChild(overlayRect);
+    
+    return `data:image/svg+xml,${encodeURIComponent(svg.outerHTML)}`;
+  };
+
+  const maskImage = isPartialBlur ? createSpotlightMask() : undefined;
+
   return (
     <>
       {/* Status announcements for screen readers */}
@@ -82,19 +137,33 @@ export const Spotlight: React.FC<SpotlightProps> = ({
         {`Tour step: ${targetLabel}. ${content}`}
       </div>
 
+      {/* Blur overlay */}
+      {isPartialBlur && (
+        <div
+          className="fixed inset-0 z-40 backdrop-blur-sm bg-black/40"
+          style={{
+            mixBlendMode: 'multiply',
+          }}
+          role="presentation"
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Spotlight cutout */}
       <div
         ref={overlayRef}
-        className={clsx('tour-overlay fixed inset-0 z-50', overlayClassName)}
+        className={clsx('tour-overlay fixed inset-0 z-40', overlayClassName)}
         style={{
           clipPath: `path('M0 0H100%V100%H0V0z M${rect.left} ${rect.top}H${rect.right}V${rect.bottom}H${rect.left}V${rect.top}z')`,
         }}
         role="presentation"
         aria-hidden="true"
       />
+
       {highlightTarget && (
         <div
           className={clsx(
-            'fixed z-40 transition-all duration-200',
+            'fixed z-50 transition-all duration-200',
             highlightConfig.className
           )}
           style={{
@@ -103,11 +172,28 @@ export const Spotlight: React.FC<SpotlightProps> = ({
             left: rect.left - 4,
             width: rect.width + 8,
             height: rect.height + 8,
+            isolation: 'isolate',
           }}
           role="presentation"
           aria-hidden="true"
         />
       )}
+
+      {/* Add isolation to the target element */}
+      {isPartialBlur && (
+        <style>
+          {`
+            #${targetElement.id} {
+              isolation: isolate;
+              position: relative;
+              z-index: 50;
+              transform: translateZ(0);
+              will-change: transform;
+            }
+          `}
+        </style>
+      )}
+
       <div
         ref={refs.setFloating}
         style={floatingStyles}
