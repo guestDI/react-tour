@@ -10,18 +10,51 @@ const meta: Meta<typeof Tour> = {
       <TourProvider steps={[
         {
           selector: '#welcome-button',
-          content: 'Welcome to our app! Click here to get started.',
+          content: {
+            type: 'text',
+            value: 'Welcome to our app! Click here to get started.',
+          },
           placement: 'bottom',
         },
         {
           selector: '#features-section',
-          content: 'Check out our amazing features!',
+          content: {
+            type: 'image',
+            value: 'https://picsum.photos/400/200',
+            props: {
+              alt: 'Features overview',
+            },
+          },
           placement: 'right',
         },
         {
           selector: '#settings-button',
-          content: 'Customize your experience in settings.',
+          content: {
+            type: 'video',
+            value: 'https://example.com/demo-video.mp4',
+            props: {
+              poster: 'https://picsum.photos/400/200',
+            },
+          },
           placement: 'left',
+        },
+        {
+          selector: '#custom-content',
+          content: {
+            type: 'custom',
+            value: (
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Custom Content</h3>
+                <p>This is a custom rendered component with multiple elements.</p>
+                <ul className="list-disc list-inside">
+                  <li>Feature 1</li>
+                  <li>Feature 2</li>
+                  <li>Feature 3</li>
+                </ul>
+              </div>
+            ),
+          },
+          placement: 'top',
         },
       ]}>
         <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-8">
@@ -84,6 +117,18 @@ const meta: Meta<typeof Tour> = {
                   >
                     Configure
                   </button>
+                </div>
+
+                <div
+                  id="custom-content"
+                  className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-emerald-100 dark:border-emerald-900/50 hover:border-emerald-200 dark:hover:border-emerald-800/50 transition-colors duration-200"
+                >
+                  <h2 className="text-2xl font-semibold text-emerald-900 dark:text-emerald-200 mb-4">
+                    Custom Content
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    This section demonstrates custom content rendering in the tour.
+                  </p>
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border-2 border-emerald-100 dark:border-emerald-900/50 hover:border-emerald-200 dark:hover:border-emerald-800/50 transition-colors duration-200">
@@ -246,6 +291,36 @@ export const WithPartialBlur: Story = {
             style: {
               borderRadius: '0.75rem',
               boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.2)',
+              transition: 'all 0.2s ease-in-out',
+            }
+          }}
+        />
+      </>
+    );
+  },
+};
+
+export const WithoutSkipButton: Story = {
+  render: () => {
+    const { start } = useTour();
+    return (
+      <>
+        <button
+          onClick={start}
+          className="w-full px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+        >
+          Start Tour
+        </button>
+        <Tour
+          skip={false}
+          tooltipClassName="!bg-amber-50 !border-amber-200 !text-amber-900 dark:!bg-gray-800 dark:!border-amber-900 dark:!text-amber-100"
+          buttonClassName="!bg-amber-500 !text-white hover:!bg-amber-600"
+          buttonContainerClassName="!border-t !border-amber-200 dark:!border-amber-800 !pt-4 !mt-4"
+          highlightTarget={{
+            className: '!bg-amber-500/10 !border-amber-500/30 !shadow-amber-500/20',
+            style: {
+              borderRadius: '0.75rem',
+              boxShadow: '0 0 0 4px rgba(245, 158, 11, 0.2)',
               transition: 'all 0.2s ease-in-out',
             }
           }}

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import type { TourContextValue, TourProviderProps, TourStep } from '../types';
+import type { TourContextValue, TourProviderProps } from '../types';
 
 const TourContext = createContext<TourContextValue | null>(null);
 

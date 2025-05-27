@@ -6,7 +6,9 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "dev": "vite",
@@ -15,9 +17,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "create-pr": "node create-pr.cjs",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -62,5 +64,32 @@
     "typescript-eslint": "^8.30.1",
     "vite": "^5.1.3",
     "vitest": "^1.2.2"
+  },
+  "keywords": [
+    "react",
+    "tour",
+    "guide",
+    "onboarding",
+    "product-tour",
+    "walkthrough",
+    "tutorial",
+    "accessibility",
+    "a11y"
+  ],
+  "author": "Dzmitry Ihnatovich",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guestDI/react-tour-guide"
+  },
+  "bugs": {
+    "url": "https://github.com/guestDI/react-tour-guide/issues"
+  },
+  "homepage": "https://github.com/guestDI/react-tour-guide#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

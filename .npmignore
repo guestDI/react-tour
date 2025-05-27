@@ -1,0 +1,37 @@
+# Source files
+src/
+tests/
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Development files
+.vscode/
+.idea/
+*.log
+.DS_Store
+.env*
+.eslintrc*
+.prettierrc*
+tsconfig.json
+tsup.config.ts
+vite.config.ts
+vitest.config.ts
+
+# Storybook
+storybook/
+.storybook/
+
+# Build files
+dist/
+coverage/
+
+# Git
+.git/
+.gitignore
+
+# Misc
+node_modules/
+*.tgz 

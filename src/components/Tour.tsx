@@ -13,6 +13,7 @@ export interface TourProps {
     className?: string;
     style?: React.CSSProperties;
   };
+  skip?: boolean;
 }
 
 export const Tour: React.FC<TourProps> = ({
@@ -22,8 +23,9 @@ export const Tour: React.FC<TourProps> = ({
   buttonClassName,
   buttonContainerClassName,
   highlightTarget,
+  skip = true,
 }) => {
-  const { steps, currentStep, isActive, next, back, skip } = useTour();
+  const { steps, currentStep, isActive, next, back, skip: skipTour } = useTour();
   const [targetElement, setTargetElement] = useState<Element | null>(null);
 
   useEffect(() => {
@@ -86,8 +88,8 @@ export const Tour: React.FC<TourProps> = ({
       content={currentStepData.content}
       onNext={next}
       onBack={back}
-      onSkip={skip}
-      onComplete={skip}
+      onSkip={skipTour}
+      onComplete={skipTour}
       isFirstStep={currentStep === 0}
       isLastStep={currentStep === steps.length - 1}
       className={className}
@@ -96,6 +98,7 @@ export const Tour: React.FC<TourProps> = ({
       buttonClassName={buttonClassName}
       buttonContainerClassName={buttonContainerClassName}
       highlightTarget={highlightTarget}
+      skip={skip}
     />,
     document.body
   );

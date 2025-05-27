@@ -1,8 +1,55 @@
 import React, { useEffect, useRef } from 'react';
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
-import type { SpotlightProps } from '../types';
+import type { SpotlightProps, ContentType } from '../types';
 import { clsx } from 'clsx';
 import '../styles/theme.css';
+
+const renderContent = (content: SpotlightProps['content']) => {
+  if (!content) return null;
+  
+  if (typeof content === 'string' || React.isValidElement(content)) {
+    return content;
+  }
+
+  const contentObj = content as unknown;
+  if (
+    typeof contentObj === 'object' && 
+    contentObj !== null && 
+    'type' in contentObj && 
+    'value' in contentObj
+  ) {
+    const typedContent = contentObj as ContentType;
+    switch (typedContent.type) {
+      case 'image':
+        return (
+          <img
+            src={typedContent.value as string}
+            alt="Tour content"
+            className="w-full h-auto rounded-lg"
+            {...typedContent.props}
+          />
+        );
+      case 'video':
+        return (
+          <video
+            src={typedContent.value as string}
+            controls
+            className="w-full h-auto rounded-lg"
+            role="presentation"
+            aria-label="Tour video content"
+            {...typedContent.props}
+          />
+        );
+      case 'custom':
+        return typedContent.value;
+      case 'text':
+      default:
+        return typedContent.value;
+    }
+  }
+
+  return content;
+};
 
 export const Spotlight: React.FC<SpotlightProps> = ({
   targetElement,
@@ -14,7 +61,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({
   onComplete,
   isFirstStep,
   isLastStep,
-  className,
+  skip = true,
   overlayClassName,
   tooltipClassName,
   buttonClassName,
@@ -123,8 +170,6 @@ export const Spotlight: React.FC<SpotlightProps> = ({
     return `data:image/svg+xml,${encodeURIComponent(svg.outerHTML)}`;
   };
 
-  const maskImage = isPartialBlur ? createSpotlightMask() : undefined;
-
   return (
     <>
       {/* Status announcements for screen readers */}
@@ -208,7 +253,7 @@ export const Spotlight: React.FC<SpotlightProps> = ({
           {`Tour Step: ${targetLabel}`}
         </div>
         <div id="tour-step-content" className="mb-4">
-          {content}
+          {renderContent(content)}
         </div>
         <div 
           className={clsx('flex justify-between items-center gap-2', buttonContainerClassName)}
@@ -225,13 +270,15 @@ export const Spotlight: React.FC<SpotlightProps> = ({
                 Back
               </button>
             )}
-            <button
-              onClick={onSkip}
-              className={clsx('tour-button tour-button-secondary', buttonClassName)}
-              aria-label="Skip tour"
-            >
-              Skip
-            </button>
+            {
+              skip && <button
+                onClick={onSkip}
+                className={clsx('tour-button tour-button-secondary', buttonClassName)}
+                aria-label="Skip tour"
+              >
+                Skip
+              </button>
+            }
           </div>
           <button
             onClick={isLastStep ? onComplete : onNext}

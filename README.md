@@ -11,19 +11,21 @@ A flexible and accessible product tour component for React applications.
 - Dark mode support
 - High contrast mode support
 - Reduced motion support
+- Rich content support (text, images, videos, custom components)
+- Optional skip button
 
 ## Installation
 
 ```bash
-npm install @your-org/product-tour
+npm install product-tour
 # or
-yarn add @your-org/product-tour
+yarn add product-tour
 ```
 
 ## Basic Usage
 
 ```tsx
-import { TourProvider, Tour, useTour } from '@your-org/product-tour';
+import { TourProvider, Tour, useTour } from 'product-tour';
 
 const steps = [
   {
@@ -33,7 +35,13 @@ const steps = [
   },
   {
     selector: '#features-section',
-    content: 'Check out our amazing features!',
+    content: {
+      type: 'image',
+      value: 'https://example.com/features.jpg',
+      props: {
+        alt: 'Features overview',
+      },
+    },
     placement: 'right',
   },
 ];
@@ -73,9 +81,15 @@ interface TourProviderProps {
 
 interface TourStep {
   selector: string;      // CSS selector for target element
-  content: React.ReactNode; // Content to display in tooltip
+  content: React.ReactNode | ContentType; // Content to display in tooltip
   placement?: 'top' | 'bottom' | 'left' | 'right'; // Tooltip placement
   waitFor?: () => Promise<void>; // Optional async function to wait for element
+}
+
+interface ContentType {
+  type: 'text' | 'image' | 'video' | 'custom';
+  value: string | React.ReactNode;
+  props?: Record<string, any>;
 }
 ```
 
@@ -92,6 +106,64 @@ interface TourProps {
     className?: string;              // Custom highlight class
     style?: React.CSSProperties;     // Custom highlight styles
   };
+  skip?: boolean;           // Show/hide skip button (default: true)
+}
+```
+
+## Content Types
+
+The tour supports various types of content:
+
+### Text Content
+```tsx
+{
+  selector: '#element',
+  content: 'Simple text content',
+  placement: 'bottom'
+}
+```
+
+### Image Content
+```tsx
+{
+  selector: '#element',
+  content: {
+    type: 'image',
+    value: 'https://example.com/image.jpg',
+    props: {
+      alt: 'Description',
+      className: 'custom-class'
+    }
+  },
+  placement: 'bottom'
+}
+```
+
+### Video Content
+```tsx
+{
+  selector: '#element',
+  content: {
+    type: 'video',
+    value: 'https://example.com/video.mp4',
+    props: {
+      poster: 'https://example.com/poster.jpg',
+      controls: true
+    }
+  },
+  placement: 'bottom'
+}
+```
+
+### Custom React Component
+```tsx
+{
+  selector: '#element',
+  content: {
+    type: 'custom',
+    value: <YourCustomComponent />
+  },
+  placement: 'bottom'
 }
 ```
 
@@ -132,6 +204,7 @@ You can customize the appearance using Tailwind classes through the `Tour` compo
   tooltipClassName="!bg-purple-100 !border-purple-300 !text-purple-900"
   buttonClassName="!bg-purple-500 !text-white hover:!bg-purple-600"
   overlayClassName="!bg-black/40" // Semi-transparent overlay
+  skip={false} // Hide skip button
 />
 ```
 

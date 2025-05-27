@@ -9,4 +9,15 @@ export default defineConfig({
   clean: true,
   treeshake: true,
   external: ['react', 'react-dom'],
+  esbuildOptions(options) {
+    options.banner = {
+      js: '"use client";',
+    };
+  },
+  tsconfig: 'tsconfig.json',
+  outExtension({ format }) {
+    return {
+      js: format === 'cjs' ? '.js' : '.mjs',
+    };
+  },
 }); 

@@ -1,8 +1,14 @@
 export type Placement = 'top' | 'bottom' | 'left' | 'right';
 
+export interface ContentType {
+  type: 'text' | 'image' | 'video' | 'custom';
+  value: string | React.ReactNode;
+  props?: Record<string, any>;
+}
+
 export interface TourStep {
   selector: string;
-  content: React.ReactNode;
+  content: React.ReactNode | ContentType;
   placement?: Placement;
   waitFor?: () => Promise<void>;
 }
@@ -27,15 +33,16 @@ export interface TourProviderProps {
 }
 
 export interface SpotlightProps {
-  targetElement: Element | null;
+  targetElement: Element;
   placement: Placement;
-  content: React.ReactNode;
+  content: React.ReactNode | ContentType;
   onNext: () => void;
   onBack: () => void;
   onSkip: () => void;
   onComplete: () => void;
   isFirstStep: boolean;
   isLastStep: boolean;
+  skip?: boolean;
   className?: string;
   overlayClassName?: string;
   tooltipClassName?: string;
@@ -45,4 +52,4 @@ export interface SpotlightProps {
     className?: string;
     style?: React.CSSProperties;
   };
-} 
+}
