@@ -1,57 +1,47 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
-import type { SpotlightProps, ContentType } from '../types';
-import { clsx } from 'clsx';
+import type { SpotlightProps } from '../types';
+import { TourTooltip } from './TourTooltip';
+import { TourOverlay } from './TourOverlay';
+import { TourHighlight } from './TourHighlight';
+import { useTourAccessibility } from '../hooks/useTourAccessibility';
+import { useDebounce } from '../hooks/useDebounce';
 import '../styles/theme.css';
 
-const renderContent = (content: SpotlightProps['content']) => {
-  if (!content) return null;
-  
-  if (typeof content === 'string' || React.isValidElement(content)) {
-    return content;
-  }
+/**
+ * Props for the Spotlight component
+ */
+interface SpotlightComponentProps extends SpotlightProps {
+  /** Whether this is the first step */
+  isFirstStep: boolean;
+  /** Whether this is the last step */
+  isLastStep: boolean;
+  /** Whether to show skip button */
+  skip: boolean;
+  /** Callback for next step */
+  onNext: () => void;
+  /** Callback for previous step */
+  onBack: () => void;
+  /** Callback for skipping tour */
+  onSkip: () => void;
+  /** Callback for completing tour */
+  onComplete: () => void;
+  /** Label for the target element */
+  targetLabel: string;
+  /** Whether to show progress indicator */
+  showProgress?: boolean;
+  /** Current step number */
+  currentStep?: number;
+  /** Total number of steps */
+  totalSteps?: number;
+}
 
-  const contentObj = content as unknown;
-  if (
-    typeof contentObj === 'object' && 
-    contentObj !== null && 
-    'type' in contentObj && 
-    'value' in contentObj
-  ) {
-    const typedContent = contentObj as ContentType;
-    switch (typedContent.type) {
-      case 'image':
-        return (
-          <img
-            src={typedContent.value as string}
-            alt="Tour content"
-            className="w-full h-auto rounded-lg"
-            {...typedContent.props}
-          />
-        );
-      case 'video':
-        return (
-          <video
-            src={typedContent.value as string}
-            controls
-            className="w-full h-auto rounded-lg"
-            role="presentation"
-            aria-label="Tour video content"
-            {...typedContent.props}
-          />
-        );
-      case 'custom':
-        return typedContent.value;
-      case 'text':
-      default:
-        return typedContent.value;
-    }
-  }
-
-  return content;
-};
-
-export const Spotlight: React.FC<SpotlightProps> = ({
+/**
+ * Spotlight component that highlights a target element and displays a tooltip
+ * @param props - SpotlightComponentProps
+ * @returns React component
+ */
+export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
   targetElement,
   placement,
   content,
@@ -66,161 +56,73 @@ export const Spotlight: React.FC<SpotlightProps> = ({
   tooltipClassName,
   buttonClassName,
   buttonContainerClassName,
-  highlightTarget = false,
+  highlightTarget = true,
+  currentStep,
+  totalSteps,
+  showProgress = false,
 }) => {
-  const { refs, floatingStyles, update } = useFloating({
+  const { refs: tooltipRefs, floatingStyles, update } = useFloating({
     placement,
     middleware: [offset(10), flip(), shift()],
     whileElementsMounted: autoUpdate,
   });
 
-  useEffect(() => {
-    if (targetElement) {
-      refs.setReference(targetElement);
-      update();
-    }
-  }, [targetElement, refs, update]);
+  const { LiveRegion, targetLabel } = useTourAccessibility({
+    currentStep: currentStep ?? 0,
+    totalSteps: totalSteps ?? 0,
+    targetLabel: targetElement?.getAttribute('aria-label') || 'target element',
+    content,
+    isActive: true,
+  });
 
-  const overlayRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case 'ArrowRight':
-        case 'Enter':
-          onNext();
-          break;
-        case 'ArrowLeft':
-          onBack();
-          break;
-        case 'Escape':
-          onSkip();
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onNext, onBack, onSkip]);
-
-  if (!targetElement) return null;
-
-  const rect = targetElement.getBoundingClientRect();
-  const highlightConfig = typeof highlightTarget === 'boolean' 
-    ? { className: 'tour-highlight' } 
-    : highlightTarget;
-
-  // Get the target element's accessible name or role
-  const targetLabel = targetElement.getAttribute('aria-label') || 
-                     targetElement.getAttribute('aria-labelledby') ||
-                     targetElement.getAttribute('title') ||
-                     targetElement.getAttribute('role') ||
-                     'element';
-
+  const highlightConfig = typeof highlightTarget === 'object' ? highlightTarget : { className: 'tour-highlight' };
   const isPartialBlur = overlayClassName?.includes('tour-overlay-partial-blur');
 
-  // Create a unique ID for the target element if it doesn't have one
-  useEffect(() => {
-    if (isPartialBlur && !targetElement.id) {
-      const uniqueId = `tour-target-${Math.random().toString(36).substr(2, 9)}`;
-      targetElement.id = uniqueId;
-      return () => {
-        targetElement.removeAttribute('id');
-      };
-    }
-  }, [targetElement, isPartialBlur]);
+  const rect = targetElement?.getBoundingClientRect();
+  const scrollLeft = window.scrollX;
+  const scrollTop = window.scrollY;
 
-  // Create SVG mask for partial blur
-  const createSpotlightMask = () => {
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
-    
-    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    const mask = document.createElementNS('http://www.w3.org/2000/svg', 'mask');
-    mask.setAttribute('id', 'spotlight');
-    
-    // Create a white background (this will be blurred)
-    const backgroundRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    backgroundRect.setAttribute('width', '100%');
-    backgroundRect.setAttribute('height', '100%');
-    backgroundRect.setAttribute('fill', 'white');
-    
-    // Create a black hole for the spotlight (this will be clear)
-    const spotlightRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    spotlightRect.setAttribute('x', rect.left.toString());
-    spotlightRect.setAttribute('y', rect.top.toString());
-    spotlightRect.setAttribute('width', rect.width.toString());
-    spotlightRect.setAttribute('height', rect.height.toString());
-    spotlightRect.setAttribute('fill', 'black');
-    
-    mask.appendChild(backgroundRect);
-    mask.appendChild(spotlightRect);
-    defs.appendChild(mask);
-    svg.appendChild(defs);
-    
-    // Create the actual overlay with the mask
-    const overlayRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    overlayRect.setAttribute('width', '100%');
-    overlayRect.setAttribute('height', '100%');
-    overlayRect.setAttribute('fill', 'white');
-    overlayRect.setAttribute('mask', 'url(#spotlight)');
-    svg.appendChild(overlayRect);
-    
-    return `data:image/svg+xml,${encodeURIComponent(svg.outerHTML)}`;
-  };
+  // Debounce the update function
+  const debouncedUpdate = useDebounce(update, 100);
+
+  useEffect(() => {
+    if (targetElement) {
+      tooltipRefs.setReference(targetElement);
+    }
+  }, [targetElement, tooltipRefs]);
+
+  // Add debounced scroll and resize handlers
+  useEffect(() => {
+    const handleScroll = () => debouncedUpdate();
+    const handleResize = () => debouncedUpdate();
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [debouncedUpdate]);
+
+  if (!targetElement || !rect) return null;
 
   return (
     <>
-      {/* Status announcements for screen readers */}
-      <div 
-        role="status" 
-        aria-live="polite" 
-        className="sr-only"
-        aria-atomic="true"
-      >
-        {`Tour step: ${targetLabel}. ${content}`}
-      </div>
+      <LiveRegion />
 
-      {/* Blur overlay */}
-      {isPartialBlur && (
-        <div
-          className="fixed inset-0 z-40 backdrop-blur-sm bg-black/40"
-          style={{
-            mixBlendMode: 'multiply',
-          }}
-          role="presentation"
-          aria-hidden="true"
-        />
-      )}
-
-      {/* Spotlight cutout */}
-      <div
-        ref={overlayRef}
-        className={clsx('tour-overlay fixed inset-0 z-40', overlayClassName)}
-        style={{
-          clipPath: `path('M0 0H100%V100%H0V0z M${rect.left} ${rect.top}H${rect.right}V${rect.bottom}H${rect.left}V${rect.top}z')`,
-        }}
-        role="presentation"
-        aria-hidden="true"
+      <TourOverlay
+        targetRect={rect}
+        overlayClassName={overlayClassName}
+        isPartialBlur={isPartialBlur}
       />
 
       {highlightTarget && (
-        <div
-          className={clsx(
-            'fixed z-50 transition-all duration-200',
-            highlightConfig.className
-          )}
-          style={{
-            ...highlightConfig.style,
-            top: rect.top - 4,
-            left: rect.left - 4,
-            width: rect.width + 8,
-            height: rect.height + 8,
-            isolation: 'isolate',
-          }}
-          role="presentation"
-          aria-hidden="true"
+        <TourHighlight
+          targetRect={rect}
+          scrollLeft={scrollLeft}
+          scrollTop={scrollTop}
+          highlightConfig={highlightConfig}
         />
       )}
 
@@ -239,56 +141,26 @@ export const Spotlight: React.FC<SpotlightProps> = ({
         </style>
       )}
 
-      <div
-        ref={refs.setFloating}
-        style={floatingStyles}
-        className={clsx('tour-tooltip z-50', tooltipClassName)}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="tour-step-title"
-        aria-describedby="tour-step-content"
-        data-placement={placement}
-      >
-        <div id="tour-step-title" className="sr-only">
-          {`Tour Step: ${targetLabel}`}
-        </div>
-        <div id="tour-step-content" className="mb-4">
-          {renderContent(content)}
-        </div>
-        <div 
-          className={clsx('flex justify-between items-center gap-2', buttonContainerClassName)}
-          role="toolbar"
-          aria-label="Tour navigation"
-        >
-          <div className="flex gap-2">
-            {!isFirstStep && (
-              <button
-                onClick={onBack}
-                className={clsx('tour-button tour-button-secondary', buttonClassName)}
-                aria-label="Go to previous step"
-              >
-                Back
-              </button>
-            )}
-            {
-              skip && <button
-                onClick={onSkip}
-                className={clsx('tour-button tour-button-secondary', buttonClassName)}
-                aria-label="Skip tour"
-              >
-                Skip
-              </button>
-            }
-          </div>
-          <button
-            onClick={isLastStep ? onComplete : onNext}
-            className={clsx('tour-button tour-button-primary', buttonClassName)}
-            aria-label={isLastStep ? "Complete tour" : "Go to next step"}
-          >
-            {isLastStep ? 'Done' : 'Next'}
-          </button>
-        </div>
-      </div>
+      <TourTooltip
+        content={content}
+        placement={placement}
+        isFirstStep={isFirstStep}
+        isLastStep={isLastStep}
+        skip={skip}
+        onNext={onNext}
+        onBack={onBack}
+        onSkip={onSkip}
+        onComplete={onComplete}
+        tooltipClassName={tooltipClassName}
+        buttonClassName={buttonClassName}
+        buttonContainerClassName={buttonContainerClassName}
+        targetLabel={targetLabel}
+        floatingStyles={floatingStyles}
+        setFloating={tooltipRefs.setFloating}
+        showProgress={showProgress}
+        currentStep={currentStep}
+        totalSteps={totalSteps}
+      />
 
       {/* Navigation instructions for screen readers */}
       <div 
@@ -300,4 +172,4 @@ export const Spotlight: React.FC<SpotlightProps> = ({
       </div>
     </>
   );
-}; 
+}); 

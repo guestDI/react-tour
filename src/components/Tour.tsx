@@ -2,28 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTour } from '../context/TourContext';
 import { Spotlight } from './Spotlight';
-
-export interface TourProps {
-  className?: string;
-  overlayClassName?: string;
-  tooltipClassName?: string;
-  buttonClassName?: string;
-  buttonContainerClassName?: string;
-  highlightTarget?: boolean | {
-    className?: string;
-    style?: React.CSSProperties;
-  };
-  skip?: boolean;
-}
+import type { TourProps } from '../types';
 
 export const Tour: React.FC<TourProps> = ({
-  className,
   overlayClassName,
   tooltipClassName,
   buttonClassName,
   buttonContainerClassName,
   highlightTarget,
   skip = true,
+  showProgress = false,
 }) => {
   const { steps, currentStep, isActive, next, back, skip: skipTour } = useTour();
   const [targetElement, setTargetElement] = useState<Element | null>(null);
@@ -92,13 +80,15 @@ export const Tour: React.FC<TourProps> = ({
       onComplete={skipTour}
       isFirstStep={currentStep === 0}
       isLastStep={currentStep === steps.length - 1}
-      className={className}
       overlayClassName={overlayClassName}
       tooltipClassName={tooltipClassName}
       buttonClassName={buttonClassName}
       buttonContainerClassName={buttonContainerClassName}
       highlightTarget={highlightTarget}
       skip={skip}
+      showProgress={showProgress}
+      currentStep={currentStep}
+      totalSteps={steps.length}
     />,
     document.body
   );

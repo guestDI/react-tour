@@ -328,4 +328,34 @@ export const WithoutSkipButton: Story = {
       </>
     );
   },
+};
+
+export const WithProgressIndicator: Story = {
+  render: () => {
+    const { start } = useTour();
+    return (
+      <>
+        <button
+          onClick={start}
+          className="w-full px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+        >
+          Start Tour
+        </button>
+        <Tour
+          showProgress
+          tooltipClassName="!bg-white !border-rose-200 !text-gray-900 dark:!bg-gray-800 dark:!border-rose-900 dark:!text-gray-100"
+          buttonClassName="!bg-rose-500 !text-white hover:!bg-rose-600"
+          buttonContainerClassName="!border-t !border-gray-200 dark:!border-gray-700 !pt-4 !mt-4"
+          highlightTarget={{
+            className: '!bg-rose-500/10 !border-rose-500/30 !shadow-rose-500/20',
+            style: {
+              borderRadius: '0.75rem',
+              boxShadow: '0 0 0 4px rgba(244, 63, 94, 0.2)',
+              transition: 'all 0.2s ease-in-out',
+            }
+          }}
+        />
+      </>
+    );
+  },
 }; 

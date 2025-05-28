@@ -1,14 +1,21 @@
+import type { ReactNode } from 'react';
+
 export type Placement = 'top' | 'bottom' | 'left' | 'right';
+
+export type MediaSource = {
+  type: 'remote' | 'local';
+  src: string;
+};
 
 export interface ContentType {
   type: 'text' | 'image' | 'video' | 'custom';
-  value: string | React.ReactNode;
-  props?: Record<string, any>;
+  value: ReactNode | MediaSource;
+  props?: Record<string, unknown>;
 }
 
 export interface TourStep {
   selector: string;
-  content: React.ReactNode | ContentType;
+  content: ReactNode | ContentType;
   placement?: Placement;
   waitFor?: () => Promise<void>;
 }
@@ -26,16 +33,21 @@ export interface TourContextValue {
 
 export interface TourProviderProps {
   steps: TourStep[];
-  children: React.ReactNode;
+  children: ReactNode;
   defaultActive?: boolean;
   onComplete?: () => void;
   onSkip?: () => void;
 }
 
+export interface HighlightConfig {
+  className?: string;
+  style?: React.CSSProperties;
+}
+
 export interface SpotlightProps {
-  targetElement: Element;
+  targetElement: Element | null;
   placement: Placement;
-  content: React.ReactNode | ContentType;
+  content: ReactNode | ContentType;
   onNext: () => void;
   onBack: () => void;
   onSkip: () => void;
@@ -43,13 +55,36 @@ export interface SpotlightProps {
   isFirstStep: boolean;
   isLastStep: boolean;
   skip?: boolean;
-  className?: string;
   overlayClassName?: string;
   tooltipClassName?: string;
   buttonClassName?: string;
   buttonContainerClassName?: string;
-  highlightTarget?: boolean | {
-    className?: string;
-    style?: React.CSSProperties;
-  };
+  highlightTarget?: boolean | HighlightConfig;
+  currentStep?: number;
+  totalSteps?: number;
+  showProgress?: boolean;
+}
+
+export interface UseTourAccessibilityOptions {
+  currentStep: number;
+  totalSteps: number;
+  targetLabel: string;
+  content: ReactNode | ContentType;
+  isActive: boolean;
+}
+
+export interface UseTourAccessibilityReturn {
+  LiveRegion: () => React.ReactElement;
+  createFocusTrap: (element: HTMLElement) => () => void;
+  targetLabel: string;
+}
+
+export interface TourProps {
+  overlayClassName?: string;
+  tooltipClassName?: string;
+  buttonClassName?: string;
+  buttonContainerClassName?: string;
+  highlightTarget?: boolean | HighlightConfig;
+  showProgress?: boolean;
+  skip?: boolean;
 }

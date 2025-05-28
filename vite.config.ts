@@ -4,4 +4,12 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    sourcemap: true,
+    // Ensure source maps are generated for both development and production
+    minify: 'terser',
+    terserOptions: {
+      sourceMap: true,
+    },
+  },
 })

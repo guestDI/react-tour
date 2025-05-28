@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { TourProvider, useTour } from '../../context/TourContext';
 import { Tour } from '../Tour';
 import userEvent from '@testing-library/user-event';
-import '../styles/theme.css';
+import '../../styles/theme.css';
 
 const steps = [
   {

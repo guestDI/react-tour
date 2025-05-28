@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { Spotlight } from '../Spotlight';
 import { vi } from 'vitest';
+import type { ContentType } from '../../types';
 
 describe('Spotlight', () => {
   const mockElement = document.createElement('div');
@@ -57,9 +58,12 @@ describe('Spotlight', () => {
     });
 
     it('renders image content', () => {
-      const imageContent = {
-        type: 'image' as const,
-        value: 'https://example.com/image.jpg',
+      const imageContent: ContentType = {
+        type: 'image',
+        value: {
+          type: 'remote',
+          src: 'https://example.com/image.jpg'
+        },
         props: {
           alt: 'Test image',
           className: 'test-image',
@@ -75,9 +79,12 @@ describe('Spotlight', () => {
     });
 
     it('renders video content', () => {
-      const videoContent = {
-        type: 'video' as const,
-        value: 'https://example.com/video.mp4',
+      const videoContent: ContentType = {
+        type: 'video',
+        value: {
+          type: 'remote',
+          src: 'https://example.com/video.mp4'
+        },
         props: {
           poster: 'https://example.com/poster.jpg',
           controls: true,
@@ -85,7 +92,7 @@ describe('Spotlight', () => {
       };
 
       render(<Spotlight {...defaultProps} content={videoContent} />);
-      const video = screen.getByLabelText('Tour video content');
+      const video = screen.getByRole('presentation');
       expect(video).toBeInTheDocument();
       expect(video).toHaveAttribute('src', 'https://example.com/video.mp4');
       expect(video).toHaveAttribute('poster', 'https://example.com/poster.jpg');
@@ -94,8 +101,8 @@ describe('Spotlight', () => {
 
     it('renders custom component content', () => {
       const CustomComponent = () => <div data-testid="custom-component">Custom Content</div>;
-      const customContent = {
-        type: 'custom' as const,
+      const customContent: ContentType = {
+        type: 'custom',
         value: <CustomComponent />,
       };
 

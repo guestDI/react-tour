@@ -1,46 +1,53 @@
-# Product Tour Component
+# React Product Tour
 
 A flexible and accessible product tour component for React applications.
 
 ## Features
 
-- Interactive step-by-step guided tours
-- Customizable styling and animations
-- Keyboard navigation support
-- Screen reader accessibility
-- Dark mode support
-- High contrast mode support
-- Reduced motion support
-- Rich content support (text, images, videos, custom components)
-- Optional skip button
+- 🎯 Spotlight focus on target elements
+- 🎨 Customizable styling and theming
+- ♿ Accessibility support
+- 📱 Responsive design
+- 🎭 Multiple content types (text, images, videos, custom content)
+- 🔄 Navigation controls (next, back, skip)
+- 🎥 Support for both remote and local media files
+- 🎯 Highlight target elements with customizable styles
+- 🎨 Partial blur overlay option
+- 🎭 Composable component architecture
+- 📊 Progress indicator
+- 🛡️ Error boundaries for graceful degradation
+- 🔍 Source maps for better debugging
+- 🎯 Debounced event handlers for better performance
 
 ## Installation
 
 ```bash
-npm install product-tour
+npm install @your-org/react-product-tour
 # or
-yarn add product-tour
+yarn add @your-org/react-product-tour
 ```
 
-## Basic Usage
+## Usage
+
+### Basic Usage
 
 ```tsx
-import { TourProvider, Tour, useTour } from 'product-tour';
+import { TourProvider, useTour } from '@your-org/react-product-tour';
 
 const steps = [
   {
-    selector: '#welcome-button',
-    content: 'Welcome to our app! Click here to get started.',
+    selector: '#feature-1',
+    content: 'Welcome to Feature 1!',
     placement: 'bottom',
   },
   {
-    selector: '#features-section',
+    selector: '#feature-2',
     content: {
       type: 'image',
-      value: 'https://example.com/features.jpg',
-      props: {
-        alt: 'Features overview',
-      },
+      value: {
+        type: 'local',
+        src: '/assets/images/feature-2.jpg'
+      }
     },
     placement: 'right',
   },
@@ -53,230 +60,225 @@ function App() {
     </TourProvider>
   );
 }
+```
 
-function YourApp() {
-  const { start } = useTour();
-  
-  return (
-    <>
-      <button onClick={start}>Start Tour</button>
-      <Tour />
-    </>
-  );
+### Content Types
+
+The tour supports various content types:
+
+1. **Text Content**
+```tsx
+{
+  selector: '#feature-1',
+  content: 'Simple text content'
 }
+```
+
+2. **Image Content**
+```tsx
+// Remote image
+{
+  selector: '#feature-2',
+  content: {
+    type: 'image',
+    value: 'https://example.com/image.jpg'
+  }
+}
+
+// Local image
+{
+  selector: '#feature-2',
+  content: {
+    type: 'image',
+    value: {
+      type: 'local',
+      src: '/assets/images/feature-2.jpg'
+    }
+  }
+}
+```
+
+3. **Video Content**
+```tsx
+// Remote video
+{
+  selector: '#feature-3',
+  content: {
+    type: 'video',
+    value: 'https://example.com/video.mp4'
+  }
+}
+
+// Local video
+{
+  selector: '#feature-3',
+  content: {
+    type: 'video',
+    value: {
+      type: 'local',
+      src: '/assets/videos/feature-3.mp4'
+    }
+  }
+}
+```
+
+4. **Custom Content**
+```tsx
+{
+  selector: '#feature-4',
+  content: {
+    type: 'custom',
+    value: <YourCustomComponent />
+  }
+}
+```
+
+### Component Structure
+
+The package is built using a composable architecture:
+
+- `TourProvider`: Main context provider for tour state management
+- `Spotlight`: Core component that handles positioning and rendering
+- `TourOverlay`: Manages the overlay and spotlight cutout
+- `TourHighlight`: Handles the highlight outline around target elements
+- `TourTooltip`: Manages the tooltip content and navigation
+
+### Styling
+
+The component uses CSS modules and supports customization through className props:
+
+```tsx
+<TourProvider
+  steps={steps}
+  overlayClassName="custom-overlay"
+  tooltipClassName="custom-tooltip"
+  buttonClassName="custom-button"
+  buttonContainerClassName="custom-button-container"
+>
+  <YourApp />
+</TourProvider>
+```
+
+### Highlight Configuration
+
+You can customize the highlight appearance:
+
+```tsx
+{
+  selector: '#feature-1',
+  content: 'Welcome!',
+  highlightTarget: {
+    className: 'custom-highlight',
+    style: {
+      borderColor: 'blue',
+      borderWidth: '2px'
+    }
+  }
+}
+```
+
+### Partial Blur Overlay
+
+Enable partial blur effect for the overlay:
+
+```tsx
+<TourProvider
+  steps={steps}
+  overlayClassName="tour-overlay-partial-blur"
+>
+  <YourApp />
+</TourProvider>
+```
+
+### Progress Indicator
+
+Enable a progress bar to show the current step and total steps:
+
+```tsx
+<TourProvider
+  steps={steps}
+  showProgress={true}
+>
+  <YourApp />
+</TourProvider>
+```
+
+### Error Handling
+
+The tour includes built-in error boundaries and fallback content for media loading errors:
+
+```tsx
+// Custom error boundary
+<ErrorBoundary
+  fallback={<YourCustomErrorComponent />}
+  onError={(error, errorInfo) => {
+    console.error('Tour error:', error, errorInfo);
+  }}
+>
+  <TourProvider steps={steps}>
+    <YourApp />
+  </TourProvider>
+</ErrorBoundary>
+```
+
+### Development
+
+The package includes source maps for better debugging in both development and production:
+
+```bash
+# Development
+npm run dev
+
+# Production build with source maps
+npm run build
 ```
 
 ## API Reference
 
 ### TourProvider Props
 
-```tsx
-interface TourProviderProps {
-  steps: TourStep[];
-  children: React.ReactNode;
-  defaultActive?: boolean;
-  onComplete?: () => void;
-  onSkip?: () => void;
-}
+| Prop | Type | Description |
+|------|------|-------------|
+| steps | TourStep[] | Array of tour steps |
+| children | ReactNode | Child components |
+| defaultActive | boolean | Whether the tour should start automatically |
+| onComplete | () => void | Callback when tour is completed |
+| onSkip | () => void | Callback when tour is skipped |
+| showProgress | boolean | Whether to show the progress indicator |
+| overlayClassName | string | Custom class for the overlay |
+| tooltipClassName | string | Custom class for the tooltip |
+| buttonClassName | string | Custom class for the buttons |
+| buttonContainerClassName | string | Custom class for the button container |
 
-interface TourStep {
-  selector: string;      // CSS selector for target element
-  content: React.ReactNode | ContentType; // Content to display in tooltip
-  placement?: 'top' | 'bottom' | 'left' | 'right'; // Tooltip placement
-  waitFor?: () => Promise<void>; // Optional async function to wait for element
-}
+### TourStep
 
-interface ContentType {
-  type: 'text' | 'image' | 'video' | 'custom';
-  value: string | React.ReactNode;
-  props?: Record<string, any>;
-}
-```
+| Property | Type | Description |
+|----------|------|-------------|
+| selector | string | CSS selector for the target element |
+| content | ReactNode \| ContentType | Content to display in the tooltip |
+| placement | Placement | Tooltip placement relative to target |
+| waitFor | () => Promise<void> | Optional function to wait for before showing step |
+| highlightTarget | boolean \| HighlightConfig | Configuration for target highlighting |
 
-### Tour Component Props
+### ContentType
 
-```tsx
-interface TourProps {
-  className?: string;        // Root container class
-  overlayClassName?: string; // Overlay background class
-  tooltipClassName?: string; // Tooltip container class
-  buttonClassName?: string;  // Button classes
-  buttonContainerClassName?: string; // Button container class
-  highlightTarget?: boolean | {      // Target element highlight
-    className?: string;              // Custom highlight class
-    style?: React.CSSProperties;     // Custom highlight styles
-  };
-  skip?: boolean;           // Show/hide skip button (default: true)
-}
-```
+| Property | Type | Description |
+|----------|------|-------------|
+| type | 'text' \| 'image' \| 'video' \| 'custom' | Type of content |
+| value | ReactNode \| MediaSource | Content value |
+| props | Record<string, unknown> | Additional props for the content |
 
-## Content Types
+### MediaSource
 
-The tour supports various types of content:
-
-### Text Content
-```tsx
-{
-  selector: '#element',
-  content: 'Simple text content',
-  placement: 'bottom'
-}
-```
-
-### Image Content
-```tsx
-{
-  selector: '#element',
-  content: {
-    type: 'image',
-    value: 'https://example.com/image.jpg',
-    props: {
-      alt: 'Description',
-      className: 'custom-class'
-    }
-  },
-  placement: 'bottom'
-}
-```
-
-### Video Content
-```tsx
-{
-  selector: '#element',
-  content: {
-    type: 'video',
-    value: 'https://example.com/video.mp4',
-    props: {
-      poster: 'https://example.com/poster.jpg',
-      controls: true
-    }
-  },
-  placement: 'bottom'
-}
-```
-
-### Custom React Component
-```tsx
-{
-  selector: '#element',
-  content: {
-    type: 'custom',
-    value: <YourCustomComponent />
-  },
-  placement: 'bottom'
-}
-```
-
-## Styling
-
-The library provides multiple ways to customize its appearance:
-
-### 1. CSS Variables
-
-You can override the default theme by setting CSS variables in your root:
-
-```css
-:root {
-  --tour-overlay-bg: rgba(0, 0, 0, 0.5);
-  --tour-tooltip-bg: #ffffff;
-  --tour-tooltip-border: #e5e7eb;
-  --tour-tooltip-text: #1f2937;
-  --tour-tooltip-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --tour-tooltip-padding: 1rem;
-  --tour-tooltip-radius: 0.5rem;
-  --tour-tooltip-transition: all 0.2s ease-in-out;
-}
-
-/* Dark mode variables */
-.dark {
-  --tour-tooltip-bg: #1f2937;
-  --tour-tooltip-border: #374151;
-  --tour-tooltip-text: #f9fafb;
-}
-```
-
-### 2. Tailwind Classes
-
-You can customize the appearance using Tailwind classes through the `Tour` component props:
-
-```tsx
-<Tour
-  tooltipClassName="!bg-purple-100 !border-purple-300 !text-purple-900"
-  buttonClassName="!bg-purple-500 !text-white hover:!bg-purple-600"
-  overlayClassName="!bg-black/40" // Semi-transparent overlay
-  skip={false} // Hide skip button
-/>
-```
-
-### 3. Overlay and Blur Effects
-
-The overlay can be customized with or without blur effects:
-
-```tsx
-// Basic overlay without blur
-<Tour
-  overlayClassName="!bg-black/40"
-/>
-
-// Overlay with blur effect
-<Tour
-  overlayClassName="!bg-black/40 tour-overlay-blur"
-/>
-
-// Overlay with partial blur (only non-spotlighted areas are blurred)
-<Tour
-  overlayClassName="!bg-black/40 tour-overlay-partial-blur"
-/>
-```
-
-The partial blur effect creates a spotlight effect where only the non-spotlighted areas are blurred, making the highlighted element stand out even more. This is particularly useful when you want to maintain context while focusing attention on specific elements.
-
-### 4. Custom Classes
-
-You can also use your own CSS classes by extending the default ones:
-
-```css
-/* Your custom styles */
-.custom-tooltip {
-  /* Extend tour-tooltip */
-  @apply tour-tooltip;
-  /* Add your custom styles */
-  background: linear-gradient(to right, #4f46e5, #7c3aed);
-}
-```
-
-### Default Highlight Styles
-
-The library provides default highlight styles that can be customized:
-
-```css
-.tour-highlight {
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
-}
-
-.dark .tour-highlight {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
-}
-```
-
-## Accessibility
-
-- Keyboard navigation (Arrow keys, Enter, Escape)
-- ARIA attributes for screen readers
-- Focus management
-- Semantic HTML structure
-- High contrast mode support
-- Reduced motion support
+| Property | Type | Description |
+|----------|------|-------------|
+| type | 'remote' \| 'local' | Type of media source |
+| src | string | Source URL or path |
 
 ## Contributing
 
-Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) to get started.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT © [Your Name]
+MIT
