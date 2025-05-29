@@ -12,19 +12,34 @@ export const Tour: React.FC<TourProps> = ({
   highlightTarget,
   skip = true,
   showProgress = false,
+  isRTL = false,
+  accessibility = {},
 }) => {
   const { steps, currentStep, isActive, next, back, skip: skipTour } = useTour();
   const [targetElement, setTargetElement] = useState<Element | null>(null);
 
+  // Default announcements
+  const defaultAnnouncements = {
+    start: 'Tour started. Use arrow keys to navigate between steps.',
+    end: 'Tour ended.',
+    step: 'Step {step} of {total}: {content}',
+  };
+
+  // Merge default and custom announcements
+  const announcements = {
+    ...defaultAnnouncements,
+    ...accessibility.announcements,
+  };
+
   useEffect(() => {
-    if (isActive) {
+    if (isActive && accessibility.enableScreenReader !== false) {
       // Announce tour start to screen readers
       const announcement = document.createElement('div');
       announcement.setAttribute('role', 'status');
       announcement.setAttribute('aria-live', 'polite');
       announcement.setAttribute('aria-atomic', 'true');
       announcement.className = 'sr-only';
-      announcement.textContent = 'Tour started. Use arrow keys to navigate between steps.';
+      announcement.textContent = announcements.start;
       document.body.appendChild(announcement);
       
       // Clean up announcement after a delay
@@ -39,7 +54,7 @@ export const Tour: React.FC<TourProps> = ({
         endAnnouncement.setAttribute('aria-live', 'polite');
         endAnnouncement.setAttribute('aria-atomic', 'true');
         endAnnouncement.className = 'sr-only';
-        endAnnouncement.textContent = 'Tour ended.';
+        endAnnouncement.textContent = announcements.end;
         document.body.appendChild(endAnnouncement);
         
         setTimeout(() => {
@@ -47,7 +62,7 @@ export const Tour: React.FC<TourProps> = ({
         }, 3000);
       };
     }
-  }, [isActive]);
+  }, [isActive, accessibility.enableScreenReader, announcements]);
 
   useEffect(() => {
     if (!isActive) return;
@@ -89,6 +104,8 @@ export const Tour: React.FC<TourProps> = ({
       showProgress={showProgress}
       currentStep={currentStep}
       totalSteps={steps.length}
+      isRTL={isRTL}
+      accessibility={accessibility}
     />,
     document.body
   );

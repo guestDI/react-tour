@@ -34,6 +34,26 @@ interface SpotlightComponentProps extends SpotlightProps {
   currentStep?: number;
   /** Total number of steps */
   totalSteps?: number;
+  /** Whether the tour is in RTL mode */
+  isRTL?: boolean;
+  /** Accessibility configuration */
+  accessibility?: {
+    /** Whether to enable screen reader announcements */
+    enableScreenReader?: boolean;
+    /** Custom screen reader announcements */
+    announcements?: {
+      /** Announcement when tour starts */
+      start?: string;
+      /** Announcement when tour ends */
+      end?: string;
+      /** Announcement for each step */
+      step?: string;
+    };
+    /** Focus management strategy */
+    focusManagement?: 'auto' | 'manual';
+    /** Whether to trap focus within the tour */
+    focusTrap?: boolean;
+  };
 }
 
 /**
@@ -60,6 +80,8 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
   currentStep,
   totalSteps,
   showProgress = false,
+  isRTL = false,
+  accessibility = {},
 }) => {
   const { refs: tooltipRefs, floatingStyles, update } = useFloating({
     placement,
@@ -73,6 +95,10 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
     targetLabel: targetElement?.getAttribute('aria-label') || 'target element',
     content,
     isActive: true,
+    enableScreenReader: accessibility.enableScreenReader,
+    announcements: accessibility.announcements,
+    focusManagement: accessibility.focusManagement,
+    focusTrap: accessibility.focusTrap,
   });
 
   const highlightConfig = typeof highlightTarget === 'object' ? highlightTarget : { className: 'tour-highlight' };
@@ -109,7 +135,7 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
 
   return (
     <>
-      <LiveRegion />
+      {accessibility.enableScreenReader !== false && <LiveRegion />}
 
       <TourOverlay
         targetRect={rect}
@@ -160,16 +186,19 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
         showProgress={showProgress}
         currentStep={currentStep}
         totalSteps={totalSteps}
+        isRTL={isRTL}
       />
 
       {/* Navigation instructions for screen readers */}
-      <div 
-        role="complementary" 
-        aria-label="Tour navigation instructions" 
-        className="sr-only"
-      >
-        Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
-      </div>
+      {accessibility.enableScreenReader !== false && (
+        <div 
+          role="complementary" 
+          aria-label="Tour navigation instructions" 
+          className="sr-only"
+        >
+          Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
+        </div>
+      )}
     </>
   );
 }); 

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Spotlight } from '../Spotlight';
 import { vi } from 'vitest';
 import type { ContentType } from '../../types';
@@ -27,6 +27,15 @@ describe('Spotlight', () => {
     onComplete: vi.fn(),
     isFirstStep: false,
     isLastStep: false,
+    skip: true,
+    targetLabel: 'Test Element',
+    showProgress: false,
+    currentStep: 1,
+    totalSteps: 3,
+    overlayClassName: '',
+    tooltipClassName: '',
+    buttonClassName: '',
+    buttonContainerClassName: '',
   };
 
   it('renders content and navigation buttons', () => {
@@ -49,6 +58,26 @@ describe('Spotlight', () => {
 
     expect(screen.getByText('Done')).toBeInTheDocument();
     expect(screen.queryByText('Next')).not.toBeInTheDocument();
+  });
+
+  describe('Progress Indicator', () => {
+    it('shows progress bar when showProgress is true', () => {
+      render(<Spotlight {...defaultProps} showProgress={true} />);
+      expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    });
+
+    it('hides progress bar when showProgress is false', () => {
+      render(<Spotlight {...defaultProps} showProgress={false} />);
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    });
+
+    it('displays correct progress value', () => {
+      render(<Spotlight {...defaultProps} showProgress={true} currentStep={2} totalSteps={4} />);
+      const progressBar = screen.getByRole('progressbar');
+      expect(progressBar).toHaveAttribute('aria-valuenow', '50');
+      expect(progressBar).toHaveAttribute('aria-valuemin', '0');
+      expect(progressBar).toHaveAttribute('aria-valuemax', '100');
+    });
   });
 
   describe('Content Types', () => {
@@ -110,6 +139,21 @@ describe('Spotlight', () => {
       expect(screen.getByTestId('custom-component')).toBeInTheDocument();
       expect(screen.getByText('Custom Content')).toBeInTheDocument();
     });
+
+    it('shows fallback content when media fails to load', () => {
+      const imageContent: ContentType = {
+        type: 'image',
+        value: {
+          type: 'remote',
+          src: 'https://example.com/invalid-image.jpg'
+        },
+      };
+
+      render(<Spotlight {...defaultProps} content={imageContent} />);
+      const image = screen.getByRole('img');
+      fireEvent.error(image);
+      expect(screen.getByText('Failed to load image')).toBeInTheDocument();
+    });
   });
 
   describe('Skip Button', () => {
@@ -121,6 +165,21 @@ describe('Spotlight', () => {
     it('hides skip button when skip prop is false', () => {
       render(<Spotlight {...defaultProps} skip={false} />);
       expect(screen.queryByText('Skip')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('has correct ARIA attributes', () => {
+      render(<Spotlight {...defaultProps} />);
+      
+      const tooltip = screen.getByRole('dialog');
+      expect(tooltip).toHaveAttribute('aria-modal', 'true');
+      expect(tooltip).toHaveAttribute('aria-labelledby', 'tour-step-title');
+      expect(tooltip).toHaveAttribute('aria-describedby', 'tour-step-content');
+
+      expect(screen.getByText('Next')).toHaveAttribute('aria-label', 'Go to next step');
+      expect(screen.getByText('Back')).toHaveAttribute('aria-label', 'Go to previous step');
+      expect(screen.getByText('Skip')).toHaveAttribute('aria-label', 'Skip tour');
     });
   });
 }); 

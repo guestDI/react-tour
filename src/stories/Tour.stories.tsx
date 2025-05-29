@@ -358,4 +358,111 @@ export const WithProgressIndicator: Story = {
       </>
     );
   },
+};
+
+export const WithStepCallbacks: Story = {
+  render: () => {
+    const { start } = useTour();
+
+    return (
+      <div className="p-8 space-y-8">
+        <div className="flex justify-between items-center">
+          <button
+            id="welcome-button"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Welcome
+          </button>
+          <button
+            id="settings-button"
+            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          >
+            Settings
+          </button>
+        </div>
+
+        <div
+          id="features-section"
+          className="p-4 border border-gray-200 rounded"
+        >
+          <h2 className="text-xl font-bold mb-4">Features</h2>
+          <p>Explore our amazing features!</p>
+        </div>
+
+        <div
+          id="custom-content"
+          className="p-4 border border-gray-200 rounded"
+        >
+          <h2 className="text-xl font-bold mb-4">Custom Section</h2>
+          <p>This section demonstrates custom content rendering.</p>
+        </div>
+
+        <button
+          onClick={start}
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+        >
+          Start Tour with Callbacks
+        </button>
+
+        <Tour
+          tooltipClassName="!bg-white !border-blue-200 !text-gray-900 dark:!bg-gray-800 dark:!border-blue-900 dark:!text-gray-100"
+          buttonClassName="!bg-blue-500 !text-white hover:!bg-blue-600"
+          buttonContainerClassName="!border-t !border-gray-200 dark:!border-gray-700 !pt-4 !mt-4"
+          highlightTarget={{
+            className: '!bg-blue-500/10 !border-blue-500/30 !shadow-blue-500/20',
+            style: {
+              borderRadius: '0.75rem',
+              boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.2)',
+              transition: 'all 0.2s ease-in-out',
+            }
+          }}
+        />
+      </div>
+    );
+  },
+  decorators: [
+    (Story) => (
+      <TourProvider
+        steps={[
+          {
+            selector: '#welcome-button',
+            content: 'Welcome to our app! Click here to get started.',
+            placement: 'bottom',
+          },
+          {
+            selector: '#features-section',
+            content: 'Check out our amazing features!',
+            placement: 'right',
+          },
+          {
+            selector: '#settings-button',
+            content: 'Configure your settings here.',
+            placement: 'left',
+          },
+          {
+            selector: '#custom-content',
+            content: 'This section shows custom content rendering.',
+            placement: 'top',
+          },
+        ]}
+        onStepChange={(stepIndex, step) => {
+          console.log(`Step changed to ${stepIndex}:`, step);
+        }}
+        onStepEnter={(stepIndex, step) => {
+          console.log(`Entering step ${stepIndex}:`, step);
+        }}
+        onStepExit={(stepIndex, step) => {
+          console.log(`Exiting step ${stepIndex}:`, step);
+        }}
+        onComplete={() => {
+          console.log('Tour completed!');
+        }}
+        onSkip={() => {
+          console.log('Tour skipped!');
+        }}
+      >
+        <Story />
+      </TourProvider>
+    ),
+  ],
 }; 

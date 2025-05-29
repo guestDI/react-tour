@@ -1,5 +1,62 @@
 import React, { useEffect, useRef } from 'react';
-import type { UseTourAccessibilityOptions, UseTourAccessibilityReturn } from '../types';
+
+interface UseTourAccessibilityOptions {
+  currentStep: number;
+  totalSteps: number;
+  targetLabel: string;
+  content: React.ReactNode;
+  isActive: boolean;
+  enableScreenReader?: boolean;
+  announcements?: {
+    start?: string;
+    end?: string;
+    step?: string;
+  };
+  focusManagement?: 'auto' | 'manual';
+  focusTrap?: boolean;
+}
+
+interface LiveRegionProps {
+  currentStep: number;
+  totalSteps: number;
+  targetLabel: string;
+  content: React.ReactNode;
+  isActive: boolean;
+  announcements?: UseTourAccessibilityOptions['announcements'];
+}
+
+const LiveRegion: React.FC<LiveRegionProps> = ({
+  currentStep,
+  totalSteps,
+  targetLabel,
+  content,
+  isActive,
+  announcements,
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isActive || !ref.current) return;
+
+    const defaultStepAnnouncement = `Step ${currentStep + 1} of ${totalSteps}: ${targetLabel}. ${content}`;
+    const stepAnnouncement = announcements?.step
+      ? announcements.step
+          .replace('{step}', String(currentStep + 1))
+          .replace('{total}', String(totalSteps))
+          .replace('{content}', String(content))
+      : defaultStepAnnouncement;
+
+    ref.current.textContent = stepAnnouncement;
+  }, [currentStep, totalSteps, targetLabel, content, isActive, announcements]);
+
+  return React.createElement('div', {
+    ref,
+    role: 'status',
+    'aria-live': 'polite',
+    'aria-atomic': 'true',
+    className: 'sr-only'
+  });
+};
 
 export const useTourAccessibility = ({
   currentStep,
@@ -7,59 +64,76 @@ export const useTourAccessibility = ({
   targetLabel,
   content,
   isActive,
-}: UseTourAccessibilityOptions): UseTourAccessibilityReturn => {
-  const liveRegionRef = useRef<HTMLDivElement>(null);
+  enableScreenReader = true,
+  announcements,
+  focusManagement = 'auto',
+  focusTrap = true,
+}: UseTourAccessibilityOptions) => {
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // Update live region when step changes
   useEffect(() => {
-    if (liveRegionRef.current && isActive) {
-      const stepNumber = currentStep + 1;
-      const message = `Tour step ${stepNumber} of ${totalSteps}: ${targetLabel}. ${content}`;
-      liveRegionRef.current.textContent = message;
-    }
-  }, [currentStep, totalSteps, targetLabel, content, isActive]);
+    if (!isActive || !enableScreenReader) return;
 
-  // Create live region element
-  const LiveRegion = () => {
-    return React.createElement('div', {
-      ref: liveRegionRef,
-      role: 'status',
-      'aria-live': 'polite',
-      'aria-atomic': 'true',
-      className: 'sr-only'
-    });
-  };
+    // Store the previously focused element
+    previousFocusRef.current = document.activeElement as HTMLElement;
+
+    // Focus the first focusable element in the tour
+    if (focusManagement === 'auto') {
+      const focusableElements = document.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusableElements.length > 0) {
+        (focusableElements[0] as HTMLElement).focus();
+      }
+    }
+
+    return () => {
+      // Restore focus when tour ends
+      if (previousFocusRef.current) {
+        previousFocusRef.current.focus();
+      }
+    };
+  }, [isActive, enableScreenReader, focusManagement]);
 
   // Create focus trap
-  const createFocusTrap = (element: HTMLElement) => {
-    const focusableElements = element.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstFocusable = focusableElements[0] as HTMLElement;
-    const lastFocusable = focusableElements[focusableElements.length - 1] as HTMLElement;
+  useEffect(() => {
+    if (!isActive || !focusTrap || !enableScreenReader) return;
 
     const handleTabKey = (e: KeyboardEvent) => {
+      const focusableElements = document.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstFocusableElement = focusableElements[0] as HTMLElement;
+      const lastFocusableElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
       if (e.key === 'Tab') {
         if (e.shiftKey) {
-          if (document.activeElement === firstFocusable) {
+          if (document.activeElement === firstFocusableElement) {
             e.preventDefault();
-            lastFocusable.focus();
+            lastFocusableElement.focus();
           }
         } else {
-          if (document.activeElement === lastFocusable) {
+          if (document.activeElement === lastFocusableElement) {
             e.preventDefault();
-            firstFocusable.focus();
+            firstFocusableElement.focus();
           }
         }
       }
     };
 
-    element.addEventListener('keydown', handleTabKey);
-    return () => element.removeEventListener('keydown', handleTabKey);
-  };
+    document.addEventListener('keydown', handleTabKey);
+    return () => document.removeEventListener('keydown', handleTabKey);
+  }, [isActive, focusTrap, enableScreenReader]);
 
   return {
-    LiveRegion,
-    createFocusTrap,
+    LiveRegion: () => React.createElement(LiveRegion, {
+      currentStep,
+      totalSteps,
+      targetLabel,
+      content,
+      isActive,
+      announcements
+    }),
+    targetLabel,
   };
 }; 
