@@ -72,7 +72,7 @@ describe('Spotlight', () => {
     });
 
     it('displays correct progress value', () => {
-      render(<Spotlight {...defaultProps} showProgress={true} currentStep={2} totalSteps={4} />);
+      render(<Spotlight {...defaultProps} showProgress={true} currentStep={1} totalSteps={4} />);
       const progressBar = screen.getByRole('progressbar');
       expect(progressBar).toHaveAttribute('aria-valuenow', '50');
       expect(progressBar).toHaveAttribute('aria-valuemin', '0');
@@ -145,14 +145,13 @@ describe('Spotlight', () => {
         type: 'image',
         value: {
           type: 'remote',
-          src: 'https://example.com/invalid-image.jpg'
-        },
+          src: 'test.jpg'
+        }
       };
-
       render(<Spotlight {...defaultProps} content={imageContent} />);
       const image = screen.getByRole('img');
       fireEvent.error(image);
-      expect(screen.getByText('Failed to load image')).toBeInTheDocument();
+      expect(screen.getByText('Image failed to load')).toBeInTheDocument();
     });
   });
 

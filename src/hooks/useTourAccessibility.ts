@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
+import { ContentType } from '../types';
 
 interface UseTourAccessibilityOptions {
   currentStep: number;
   totalSteps: number;
   targetLabel: string;
-  content: React.ReactNode;
+  content: React.ReactNode | ContentType;
   isActive: boolean;
   enableScreenReader?: boolean;
   announcements?: {
@@ -130,7 +131,7 @@ export const useTourAccessibility = ({
       currentStep,
       totalSteps,
       targetLabel,
-      content,
+      content: content as React.ReactNode,
       isActive,
       announcements
     }),

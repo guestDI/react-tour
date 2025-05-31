@@ -27,33 +27,25 @@ npm install @your-org/react-product-tour
 yarn add @your-org/react-product-tour
 ```
 
-## Usage
-
-### Basic Usage
+## Quick Start
 
 ```tsx
 import { TourProvider, useTour } from '@your-org/react-product-tour';
 
-const steps = [
-  {
-    selector: '#feature-1',
-    content: 'Welcome to Feature 1!',
-    placement: 'bottom',
-  },
-  {
-    selector: '#feature-2',
-    content: {
-      type: 'image',
-      value: {
-        type: 'local',
-        src: '/assets/images/feature-2.jpg'
-      }
-    },
-    placement: 'right',
-  },
-];
-
 function App() {
+  const steps = [
+    {
+      selector: '#welcome',
+      content: 'Welcome to our app!',
+      placement: 'bottom',
+    },
+    {
+      selector: '#features',
+      content: 'Check out our amazing features!',
+      placement: 'right',
+    },
+  ];
+
   return (
     <TourProvider steps={steps}>
       <YourApp />
@@ -62,91 +54,133 @@ function App() {
 }
 ```
 
-### Content Types
+## Advanced Usage
 
-The tour supports various content types:
+### Custom Content Types
 
-1. **Text Content**
+#### Text Content
 ```tsx
-{
-  selector: '#feature-1',
-  content: 'Simple text content'
-}
+const steps = [
+  {
+    selector: '#feature-1',
+    content: 'Simple text content',
+    placement: 'bottom',
+  },
+  {
+    selector: '#feature-2',
+    content: {
+      type: 'text',
+      value: 'Formatted text content',
+      props: {
+        className: 'text-lg font-bold',
+      },
+    },
+    placement: 'right',
+  },
+];
 ```
 
-2. **Image Content**
+#### Image Content
 ```tsx
-// Remote image
-{
-  selector: '#feature-2',
-  content: {
-    type: 'image',
-    value: 'https://example.com/image.jpg'
-  }
-}
-
-// Local image
-{
-  selector: '#feature-2',
-  content: {
-    type: 'image',
-    value: {
-      type: 'local',
-      src: '/assets/images/feature-2.jpg'
-    }
-  }
-}
+const steps = [
+  // Remote image
+  {
+    selector: '#feature-1',
+    content: {
+      type: 'image',
+      value: 'https://example.com/image.jpg',
+      props: {
+        alt: 'Feature screenshot',
+        className: 'rounded-lg shadow-lg',
+      },
+    },
+    placement: 'bottom',
+  },
+  // Local image
+  {
+    selector: '#feature-2',
+    content: {
+      type: 'image',
+      value: {
+        type: 'local',
+        src: '/assets/images/feature.jpg',
+      },
+      props: {
+        alt: 'Local feature image',
+        className: 'rounded-lg',
+      },
+    },
+    placement: 'right',
+  },
+];
 ```
 
-3. **Video Content**
+#### Video Content
 ```tsx
-// Remote video
-{
-  selector: '#feature-3',
-  content: {
-    type: 'video',
-    value: 'https://example.com/video.mp4'
-  }
-}
-
-// Local video
-{
-  selector: '#feature-3',
-  content: {
-    type: 'video',
-    value: {
-      type: 'local',
-      src: '/assets/videos/feature-3.mp4'
-    }
-  }
-}
+const steps = [
+  // Remote video
+  {
+    selector: '#feature-1',
+    content: {
+      type: 'video',
+      value: 'https://example.com/video.mp4',
+      props: {
+        poster: 'https://example.com/poster.jpg',
+        controls: true,
+        className: 'rounded-lg',
+      },
+    },
+    placement: 'bottom',
+  },
+  // Local video
+  {
+    selector: '#feature-2',
+    content: {
+      type: 'video',
+      value: {
+        type: 'local',
+        src: '/assets/videos/feature.mp4',
+      },
+      props: {
+        poster: '/assets/images/poster.jpg',
+        controls: true,
+        className: 'rounded-lg',
+      },
+    },
+    placement: 'right',
+  },
+];
 ```
 
-4. **Custom Content**
+#### Custom Content
 ```tsx
-{
-  selector: '#feature-4',
-  content: {
-    type: 'custom',
-    value: <YourCustomComponent />
-  }
-}
+const steps = [
+  {
+    selector: '#feature-1',
+    content: {
+      type: 'custom',
+      value: (
+        <div className="space-y-4">
+          <h3 className="text-xl font-bold">Custom Feature</h3>
+          <p className="text-gray-600">Detailed feature description</p>
+          <ul className="list-disc list-inside">
+            <li>Feature point 1</li>
+            <li>Feature point 2</li>
+          </ul>
+          <button className="px-4 py-2 bg-blue-500 text-white rounded">
+            Learn More
+          </button>
+        </div>
+      ),
+    },
+    placement: 'bottom',
+  },
+];
 ```
 
-### Component Structure
+### Styling Customization
 
-The package is built using a composable architecture:
-
-- `TourProvider`: Main context provider for tour state management
-- `Spotlight`: Core component that handles positioning and rendering
-- `TourOverlay`: Manages the overlay and spotlight cutout
-- `TourHighlight`: Handles the highlight outline around target elements
-- `TourTooltip`: Manages the tooltip content and navigation
-
-### Styling
-
-The component uses CSS modules and supports customization through className props:
-
+#### Basic Styling
 ```tsx
 <TourProvider
   steps={steps}
@@ -159,40 +193,138 @@ The component uses CSS modules and supports customization through className prop
 </TourProvider>
 ```
 
-### Highlight Configuration
-
-You can customize the highlight appearance:
-
+#### Theme Customization
 ```tsx
-{
-  selector: '#feature-1',
-  content: 'Welcome!',
-  highlightTarget: {
-    className: 'custom-highlight',
-    style: {
-      borderColor: 'blue',
-      borderWidth: '2px'
-    }
-  }
+// styles/theme.css
+:root {
+  --tour-overlay-bg: rgba(0, 0, 0, 0.5);
+  --tour-tooltip-bg: white;
+  --tour-tooltip-text: black;
+  --tour-button-primary-bg: #3b82f6;
+  --tour-button-primary-text: white;
+}
+
+.dark {
+  --tour-overlay-bg: rgba(0, 0, 0, 0.7);
+  --tour-tooltip-bg: #1f2937;
+  --tour-tooltip-text: white;
+  --tour-button-primary-bg: #60a5fa;
+  --tour-button-primary-text: black;
 }
 ```
 
-### Partial Blur Overlay
+### Accessibility Features
 
-Enable partial blur effect for the overlay:
+#### Screen Reader Support
+```tsx
+<TourProvider
+  steps={steps}
+  accessibility={{
+    enableScreenReader: true,
+    announcements: {
+      start: 'Starting product tour. Use arrow keys to navigate.',
+      end: 'Tour completed. Thank you for exploring our features.',
+      step: 'Step {step} of {total}: {content}',
+    },
+  }}
+>
+  <YourApp />
+</TourProvider>
+```
+
+#### Focus Management
+```tsx
+<TourProvider
+  steps={steps}
+  accessibility={{
+    focusManagement: 'auto', // or 'manual'
+    focusTrap: true,
+  }}
+>
+  <YourApp />
+</TourProvider>
+```
+
+### Error Handling
+
+#### Error Boundaries
+```tsx
+import { ErrorBoundary } from '@your-org/react-product-tour';
+
+function App() {
+  return (
+    <ErrorBoundary
+      fallback={<div>Something went wrong with the tour.</div>}
+      onError={(error, errorInfo) => {
+        console.error('Tour error:', error, errorInfo);
+      }}
+    >
+      <TourProvider steps={steps}>
+        <YourApp />
+      </TourProvider>
+    </ErrorBoundary>
+  );
+}
+```
+
+#### Media Error Handling
+```tsx
+const steps = [
+  {
+    selector: '#feature-1',
+    content: {
+      type: 'image',
+      value: 'https://example.com/image.jpg',
+      props: {
+        alt: 'Feature image',
+        onError: () => {
+          console.error('Failed to load image');
+          // Show fallback content
+        },
+      },
+    },
+    placement: 'bottom',
+  },
+];
+```
+
+### Step Callbacks
 
 ```tsx
 <TourProvider
   steps={steps}
-  overlayClassName="tour-overlay-partial-blur"
+  onStepChange={(stepIndex, step) => {
+    console.log(`Step changed to ${stepIndex}:`, step);
+  }}
+  onStepEnter={(stepIndex, step) => {
+    console.log(`Entering step ${stepIndex}:`, step);
+  }}
+  onStepExit={(stepIndex, step) => {
+    console.log(`Exiting step ${stepIndex}:`, step);
+  }}
+  onComplete={() => {
+    console.log('Tour completed!');
+  }}
+  onSkip={() => {
+    console.log('Tour skipped!');
+  }}
+>
+  <YourApp />
+</TourProvider>
+```
+
+### RTL Support
+
+```tsx
+<TourProvider
+  steps={steps}
+  isRTL={true}
 >
   <YourApp />
 </TourProvider>
 ```
 
 ### Progress Indicator
-
-Enable a progress bar to show the current step and total steps:
 
 ```tsx
 <TourProvider
@@ -201,36 +333,6 @@ Enable a progress bar to show the current step and total steps:
 >
   <YourApp />
 </TourProvider>
-```
-
-### Error Handling
-
-The tour includes built-in error boundaries and fallback content for media loading errors:
-
-```tsx
-// Custom error boundary
-<ErrorBoundary
-  fallback={<YourCustomErrorComponent />}
-  onError={(error, errorInfo) => {
-    console.error('Tour error:', error, errorInfo);
-  }}
->
-  <TourProvider steps={steps}>
-    <YourApp />
-  </TourProvider>
-</ErrorBoundary>
-```
-
-### Development
-
-The package includes source maps for better debugging in both development and production:
-
-```bash
-# Development
-npm run dev
-
-# Production build with source maps
-npm run build
 ```
 
 ## API Reference
@@ -249,6 +351,8 @@ npm run build
 | tooltipClassName | string | Custom class for the tooltip |
 | buttonClassName | string | Custom class for the buttons |
 | buttonContainerClassName | string | Custom class for the button container |
+| isRTL | boolean | Whether the tour is in RTL mode |
+| accessibility | AccessibilityConfig | Accessibility configuration |
 
 ### TourStep
 
@@ -275,10 +379,19 @@ npm run build
 | type | 'remote' \| 'local' | Type of media source |
 | src | string | Source URL or path |
 
+### AccessibilityConfig
+
+| Property | Type | Description |
+|----------|------|-------------|
+| enableScreenReader | boolean | Whether to enable screen reader announcements |
+| announcements | AnnouncementsConfig | Custom screen reader announcements |
+| focusManagement | 'auto' \| 'manual' | Focus management strategy |
+| focusTrap | boolean | Whether to trap focus within the tour |
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute to this project.
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

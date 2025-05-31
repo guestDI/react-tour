@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo } from 'react';
+import React, { useEffect, memo } from 'react';
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
 import type { SpotlightProps } from '../types';
 import { TourTooltip } from './TourTooltip';
@@ -26,16 +26,12 @@ interface SpotlightComponentProps extends SpotlightProps {
   onSkip: () => void;
   /** Callback for completing tour */
   onComplete: () => void;
-  /** Label for the target element */
-  targetLabel: string;
   /** Whether to show progress indicator */
   showProgress?: boolean;
   /** Current step number */
   currentStep?: number;
   /** Total number of steps */
   totalSteps?: number;
-  /** Whether the tour is in RTL mode */
-  isRTL?: boolean;
   /** Accessibility configuration */
   accessibility?: {
     /** Whether to enable screen reader announcements */
@@ -80,7 +76,6 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
   currentStep,
   totalSteps,
   showProgress = false,
-  isRTL = false,
   accessibility = {},
 }) => {
   const { refs: tooltipRefs, floatingStyles, update } = useFloating({
@@ -186,7 +181,6 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
         showProgress={showProgress}
         currentStep={currentStep}
         totalSteps={totalSteps}
-        isRTL={isRTL}
       />
 
       {/* Navigation instructions for screen readers */}

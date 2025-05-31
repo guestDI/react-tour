@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react';
+import React, { createContext, useContext type ReactNode } from 'react';
 import type { TourStep, TourContextValue } from '../types';
 
 /**

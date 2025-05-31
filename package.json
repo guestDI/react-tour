@@ -2,13 +2,15 @@
   "name": "react-tour-guide",
   "version": "0.1.0",
   "type": "module",
+  "description": "A flexible and accessible product tour component for React applications",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "dev": "vite",
@@ -19,7 +21,9 @@
     "test:coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "npm run build",
+    "clean": "rimraf dist"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -57,6 +61,7 @@
     "postcss": "^8.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "rimraf": "^5.0.5",
     "storybook": "^8.6.14",
     "tailwindcss": "^3.4.17",
     "tsup": "^8.0.2",
@@ -74,13 +79,22 @@
     "walkthrough",
     "tutorial",
     "accessibility",
-    "a11y"
+    "a11y",
+    "ui",
+    "components",
+    "typescript",
+    "floating-ui",
+    "tailwindcss"
   ],
-  "author": "Dzmitry Ihnatovich",
+  "author": {
+    "name": "Dzmitry Ihnatovich",
+    "email": "ignatovich.dm@gmail.com",
+    "url": "https://github.com/guestDI"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/guestDI/react-tour-guide"
+    "url": "https://github.com/guestDI/react-tour-guide.git"
   },
   "bugs": {
     "url": "https://github.com/guestDI/react-tour-guide/issues"
@@ -91,5 +105,13 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
   }
 }

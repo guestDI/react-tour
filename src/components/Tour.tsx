@@ -12,7 +12,6 @@ export const Tour: React.FC<TourProps> = ({
   highlightTarget,
   skip = true,
   showProgress = false,
-  isRTL = false,
   accessibility = {},
 }) => {
   const { steps, currentStep, isActive, next, back, skip: skipTour } = useTour();
@@ -104,7 +103,6 @@ export const Tour: React.FC<TourProps> = ({
       showProgress={showProgress}
       currentStep={currentStep}
       totalSteps={steps.length}
-      isRTL={isRTL}
       accessibility={accessibility}
     />,
     document.body
