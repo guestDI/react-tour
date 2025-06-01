@@ -22,15 +22,15 @@ A flexible and accessible product tour component for React applications.
 ## Installation
 
 ```bash
-npm install @your-org/react-product-tour
+npm install react-product-tour-guide
 # or
-yarn add @your-org/react-product-tour
+yarn add react-product-tour-guide
 ```
 
 ## Quick Start
 
 ```tsx
-import { TourProvider, useTour } from '@your-org/react-product-tour';
+import { TourProvider, useTour } from 'react-product-tour-guide';
 
 function App() {
   const steps = [
@@ -246,26 +246,6 @@ const steps = [
 ```
 
 ### Error Handling
-
-#### Error Boundaries
-```tsx
-import { ErrorBoundary } from '@your-org/react-product-tour';
-
-function App() {
-  return (
-    <ErrorBoundary
-      fallback={<div>Something went wrong with the tour.</div>}
-      onError={(error, errorInfo) => {
-        console.error('Tour error:', error, errorInfo);
-      }}
-    >
-      <TourProvider steps={steps}>
-        <YourApp />
-      </TourProvider>
-    </ErrorBoundary>
-  );
-}
-```
 
 #### Media Error Handling
 ```tsx
