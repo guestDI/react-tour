@@ -1,6 +1,6 @@
 import React, { useEffect, memo } from 'react';
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
-import type { SpotlightProps } from '../types';
+import type { SpotlightProps, ButtonConfig, ButtonLayoutConfig } from '../types';
 import { TourTooltip } from './TourTooltip';
 import { TourOverlay } from './TourOverlay';
 import { TourHighlight } from './TourHighlight';
@@ -50,6 +50,13 @@ interface SpotlightComponentProps extends SpotlightProps {
     /** Whether to trap focus within the tour */
     focusTrap?: boolean;
   };
+  animation?: 'slide' | 'bounce' | 'fade';
+  /** Button configuration */
+  buttonConfig?: {
+    primary?: ButtonConfig;
+    secondary?: ButtonConfig;
+    container?: ButtonLayoutConfig;
+  };
 }
 
 /**
@@ -77,6 +84,8 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
   totalSteps,
   showProgress = false,
   accessibility = {},
+  animation = 'slide',
+  buttonConfig,
 }) => {
   const { refs: tooltipRefs, floatingStyles, update } = useFloating({
     placement,
@@ -144,6 +153,7 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
           scrollLeft={scrollLeft}
           scrollTop={scrollTop}
           highlightConfig={highlightConfig}
+          animation={animation}
         />
       )}
 
@@ -181,6 +191,8 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
         showProgress={showProgress}
         currentStep={currentStep}
         totalSteps={totalSteps}
+        animation={animation}
+        buttonConfig={buttonConfig}
       />
 
       {/* Navigation instructions for screen readers */}

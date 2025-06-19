@@ -13,6 +13,8 @@ export const Tour: React.FC<TourProps> = ({
   skip = true,
   showProgress = false,
   accessibility = {},
+  animation = 'slide',
+  buttonConfig,
 }) => {
   const { steps, currentStep, isActive, next, back, skip: skipTour } = useTour();
   const [targetElement, setTargetElement] = useState<Element | null>(null);
@@ -104,6 +106,8 @@ export const Tour: React.FC<TourProps> = ({
       currentStep={currentStep}
       totalSteps={steps.length}
       accessibility={accessibility}
+      animation={animation}
+      buttonConfig={buttonConfig}
     />,
     document.body
   );

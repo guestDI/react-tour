@@ -1,6 +1,6 @@
-import React, { type ReactNode, useState } from 'react';
+import React, { type ReactNode, useState, useEffect } from 'react';
 import { clsx } from 'clsx';
-import type { ContentType, MediaSource } from '../types';
+import type { ContentType, MediaSource, ButtonConfig, ButtonLayoutConfig, ButtonRenderProps } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { MediaFallback } from './MediaFallback';
 import { ErrorBoundary } from './ErrorBoundary';
@@ -13,6 +13,8 @@ interface TourTooltipProps {
   content: React.ReactNode | ContentType;
   /** Placement of the tooltip relative to the target */
   placement: string;
+  /** Animation type for the tooltip */
+  animation?: 'slide' | 'bounce' | 'fade';
   /** Whether this is the first step */
   isFirstStep: boolean;
   /** Whether this is the last step */
@@ -45,6 +47,12 @@ interface TourTooltipProps {
   currentStep?: number;
   /** Total number of steps */
   totalSteps?: number;
+  /** Button configuration */
+  buttonConfig?: {
+    primary?: ButtonConfig;
+    secondary?: ButtonConfig;
+    container?: ButtonLayoutConfig;
+  };
 }
 
 /**
@@ -126,6 +134,99 @@ const renderContent = (content: TourTooltipProps['content']): React.ReactNode =>
 };
 
 /**
+ * Renders the buttons based on the provided configuration
+ * @param props - ButtonRenderProps
+ * @param config - Button configuration
+ * @returns The rendered buttons
+ */
+const renderButtons = (
+  props: ButtonRenderProps & { skip?: boolean },
+  config?: {
+    primary?: ButtonConfig;
+    secondary?: ButtonConfig;
+    container?: ButtonLayoutConfig;
+  }
+): React.ReactNode => {
+  const {
+    onNext,
+    onBack,
+    onSkip,
+    onComplete,
+    isFirstStep,
+    isLastStep,
+    currentStep,
+    totalSteps,
+    skip,
+  } = props;
+
+  // If container has a custom render function, use it
+  if (config?.container?.render) {
+    return config.container.render(props);
+  }
+
+  // Default button container
+  return (
+    <div
+      className={clsx(
+        'flex justify-between items-center gap-2',
+        config?.container?.className
+      )}
+      style={{
+        flexDirection: config?.container?.direction || 'row',
+        alignItems: config?.container?.align || 'center',
+        gap: config?.container?.gap || '0.5rem',
+        ...config?.container?.style,
+      }}
+      role="toolbar"
+      aria-label="Tour navigation"
+    >
+      <div className="flex gap-2">
+        {!isFirstStep && (
+          config?.secondary?.render ? (
+            config.secondary.render(props)
+          ) : (
+            <button
+              onClick={onBack}
+              className={clsx('tour-button tour-button-secondary', config?.secondary?.className)}
+              style={config?.secondary?.style}
+              aria-label="Go to previous step"
+            >
+              {config?.secondary?.content || 'Back'}
+            </button>
+          )
+        )}
+        {skip && (
+          config?.secondary?.render ? (
+            config.secondary.render(props)
+          ) : (
+            <button
+              onClick={onSkip}
+              className={clsx('tour-button tour-button-secondary', config?.secondary?.className)}
+              style={config?.secondary?.style}
+              aria-label="Skip tour"
+            >
+              {config?.secondary?.content || 'Skip'}
+            </button>
+          )
+        )}
+      </div>
+      {config?.primary?.render ? (
+        config.primary.render(props)
+      ) : (
+        <button
+          onClick={isLastStep ? onComplete : onNext}
+          className={clsx('tour-button tour-button-primary', config?.primary?.className)}
+          style={config?.primary?.style}
+          aria-label={isLastStep ? "Complete tour" : "Go to next step"}
+        >
+          {config?.primary?.content || (isLastStep ? 'Done' : 'Next')}
+        </button>
+      )}
+    </div>
+  );
+};
+
+/**
  * Tooltip component that displays tour content and navigation controls
  * @param props - TourTooltipProps
  * @returns React component
@@ -133,6 +234,7 @@ const renderContent = (content: TourTooltipProps['content']): React.ReactNode =>
 export const TourTooltip: React.FC<TourTooltipProps> = ({
   content,
   placement,
+  animation = 'slide',
   isFirstStep,
   isLastStep,
   skip,
@@ -149,17 +251,33 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
   showProgress = false,
   currentStep,
   totalSteps,
+  buttonConfig,
 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Add a small delay to ensure the initial position is set
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+
+    return () => {
+      clearTimeout(timer);
+      setIsVisible(false);
+    };
+  }, [placement]);
+
   return (
     <div
       ref={setFloating}
       style={floatingStyles}
-      className={clsx('tour-tooltip z-50', tooltipClassName)}
+      className={clsx('tour-tooltip z-50', tooltipClassName, { visible: isVisible })}
       role="dialog"
       aria-modal="true"
       aria-labelledby="tour-step-title"
       aria-describedby="tour-step-content"
       data-placement={placement}
+      data-animation={animation}
     >
       <div id="tour-step-title" className="sr-only">
         {`Tour Step: ${targetLabel}`}
@@ -183,39 +301,24 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
           {renderContent(content)}
         </ErrorBoundary>
       </div>
-      <div 
-        className={clsx('flex justify-between items-center gap-2', buttonContainerClassName)}
-        role="toolbar"
-        aria-label="Tour navigation"
-      >
-        <div className="flex gap-2">
-          {!isFirstStep && (
-            <button
-              onClick={onBack}
-              className={clsx('tour-button tour-button-secondary', buttonClassName)}
-              aria-label="Go to previous step"
-            >
-              Back
-            </button>
-          )}
-          {skip && (
-            <button
-              onClick={onSkip}
-              className={clsx('tour-button tour-button-secondary', buttonClassName)}
-              aria-label="Skip tour"
-            >
-              Skip
-            </button>
-          )}
-        </div>
-        <button
-          onClick={isLastStep ? onComplete : onNext}
-          className={clsx('tour-button tour-button-primary', buttonClassName)}
-          aria-label={isLastStep ? "Complete tour" : "Go to next step"}
-        >
-          {isLastStep ? 'Done' : 'Next'}
-        </button>
-      </div>
+      {renderButtons(
+        {
+          onNext,
+          onBack,
+          onSkip,
+          onComplete,
+          isFirstStep,
+          isLastStep,
+          currentStep,
+          totalSteps,
+          skip,
+        },
+        buttonConfig || {
+          primary: { className: buttonClassName },
+          secondary: { className: buttonClassName },
+          container: { className: buttonContainerClassName },
+        }
+      )}
     </div>
   );
 }; 

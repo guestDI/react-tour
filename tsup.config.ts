@@ -19,5 +19,5 @@ export default defineConfig({
     return {
       js: format === 'cjs' ? '.js' : '.mjs',
     };
-  },
+  }
 }); 

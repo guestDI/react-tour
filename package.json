@@ -6,6 +6,7 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "style": "dist/index.css",
   "files": [
     "dist",
     "README.md",
@@ -14,7 +15,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsup",
+    "build": "tsup && cp src/styles/tour.css dist/index.css && cp src/styles/theme.css dist/theme.css",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
@@ -112,6 +113,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    }
+    },
+    "./dist/index.css": "./dist/index.css",
+    "./dist/theme.css": "./dist/theme.css"
   }
 }

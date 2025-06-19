@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type { TourContextValue, TourProviderProps } from '../types';
+import { tourManager } from '../manager/TourManager';
 
-const TourContext = createContext<TourContextValue | null>(null);
+export const TourContext = createContext<TourContextValue | null>(null);
 
 export const TourProvider: React.FC<TourProviderProps> = ({
   steps,
@@ -15,6 +16,11 @@ export const TourProvider: React.FC<TourProviderProps> = ({
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isActive, setIsActive] = useState(defaultActive);
+
+  // Initialize the global manager with these steps
+  useEffect(() => {
+    tourManager.initialize(steps);
+  }, [steps]);
 
   const start = useCallback(() => {
     setIsActive(true);

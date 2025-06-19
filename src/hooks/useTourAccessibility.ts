@@ -65,7 +65,7 @@ export const useTourAccessibility = ({
   targetLabel,
   content,
   isActive,
-  enableScreenReader = true,
+  enableScreenReader = false,
   announcements,
   focusManagement = 'auto',
   focusTrap = true,

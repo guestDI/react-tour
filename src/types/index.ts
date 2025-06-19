@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, CSSProperties } from 'react';
 
 export type Placement = 'top' | 'bottom' | 'left' | 'right';
 
@@ -31,33 +31,50 @@ export interface TourContextValue {
   skip: () => void;
 }
 
+export interface AccessibilityConfig {
+  enableScreenReader?: boolean;
+  announcements?: {
+    start?: string;
+    end?: string;
+    step?: string;
+  };
+  focusManagement?: 'auto' | 'manual';
+  focusTrap?: boolean;
+}
+
+export interface ComponentStyleProps {
+  className?: string;
+  style?: CSSProperties;
+}
+
+export interface TourStyleProps {
+  tooltip?: ComponentStyleProps;
+  overlay?: ComponentStyleProps;
+  button?: {
+    primary?: ComponentStyleProps;
+    secondary?: ComponentStyleProps;
+    container?: ComponentStyleProps;
+  };
+  highlight?: ComponentStyleProps;
+}
+
 export interface TourProviderProps {
   steps: TourStep[];
   children: ReactNode;
   defaultActive?: boolean;
   onComplete?: () => void;
   onSkip?: () => void;
-  /** Callback when step changes */
   onStepChange?: (stepIndex: number, step: TourStep) => void;
-  /** Callback when entering a step */
   onStepEnter?: (stepIndex: number, step: TourStep) => void;
-  /** Callback when exiting a step */
   onStepExit?: (stepIndex: number, step: TourStep) => void;
-  /** Whether to show the progress indicator */
   showProgress?: boolean;
-  /** Custom class for the overlay */
-  overlayClassName?: string;
-  /** Custom class for the tooltip */
-  tooltipClassName?: string;
-  /** Custom class for the buttons */
-  buttonClassName?: string;
-  /** Custom class for the button container */
-  buttonContainerClassName?: string;
+  isRTL?: boolean;
+  accessibility?: AccessibilityConfig;
 }
 
 export interface HighlightConfig {
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 export interface SpotlightProps {
@@ -79,6 +96,7 @@ export interface SpotlightProps {
   currentStep?: number;
   totalSteps?: number;
   showProgress?: boolean;
+  styles?: TourStyleProps;
 }
 
 export interface UseTourAccessibilityOptions {
@@ -93,6 +111,43 @@ export interface UseTourAccessibilityReturn {
   LiveRegion: () => React.ReactElement;
   createFocusTrap: (element: HTMLElement) => () => void;
   targetLabel: string;
+}
+
+export interface ButtonRenderProps {
+  onNext: () => void;
+  onBack: () => void;
+  onSkip: () => void;
+  onComplete: () => void;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+  currentStep?: number;
+  totalSteps?: number;
+}
+
+export interface ButtonConfig {
+  /** Custom content for the button */
+  content?: ReactNode;
+  /** Custom class for the button */
+  className?: string;
+  /** Custom style for the button */
+  style?: CSSProperties;
+  /** Custom render function for the button */
+  render?: (props: ButtonRenderProps) => ReactNode;
+}
+
+export interface ButtonLayoutConfig {
+  /** Custom class for the button container */
+  className?: string;
+  /** Custom style for the button container */
+  style?: CSSProperties;
+  /** Whether to show buttons in a row (default) or column */
+  direction?: 'row' | 'column';
+  /** Alignment of buttons */
+  align?: 'start' | 'center' | 'end' | 'space-between';
+  /** Gap between buttons */
+  gap?: string;
+  /** Custom render function for the entire button container */
+  render?: (props: ButtonRenderProps) => ReactNode;
 }
 
 export interface TourProps {
@@ -112,6 +167,14 @@ export interface TourProps {
   showProgress?: boolean;
   /** Whether the tour is in RTL mode */
   isRTL?: boolean;
+  /** Animation type for the tooltip and highlight */
+  animation?: 'slide' | 'bounce' | 'fade';
+  /** Custom button configuration */
+  buttonConfig?: {
+    primary?: ButtonConfig;
+    secondary?: ButtonConfig;
+    container?: ButtonLayoutConfig;
+  };
   /** Accessibility configuration */
   accessibility?: {
     /** Whether to enable screen reader announcements */
@@ -130,4 +193,5 @@ export interface TourProps {
     /** Whether to trap focus within the tour */
     focusTrap?: boolean;
   };
+  styles?: TourStyleProps;
 }

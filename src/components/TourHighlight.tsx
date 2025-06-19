@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { clsx } from 'clsx';
+import type { HighlightConfig } from '../types';
 
 interface TourHighlightProps {
   targetRect: DOMRect;
   scrollLeft: number;
   scrollTop: number;
-  highlightConfig: {
-    className?: string;
-    style?: React.CSSProperties;
-  };
+  highlightConfig: HighlightConfig;
+  animation?: 'slide' | 'bounce' | 'fade';
 }
 
 export const TourHighlight: React.FC<TourHighlightProps> = ({
@@ -16,7 +15,22 @@ export const TourHighlight: React.FC<TourHighlightProps> = ({
   scrollLeft,
   scrollTop,
   highlightConfig,
+  animation = 'slide',
 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Add a small delay to ensure the initial position is set
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 50);
+
+    return () => {
+      clearTimeout(timer);
+      setIsVisible(false);
+    };
+  }, [targetRect]);
+
   return (
     <div
       style={{
@@ -30,8 +44,10 @@ export const TourHighlight: React.FC<TourHighlightProps> = ({
       }}
       className={clsx(
         'fixed z-50 transition-all duration-200',
-        highlightConfig.className
+        highlightConfig.className,
+        { visible: isVisible }
       )}
+      data-animation={animation}
       role="presentation"
       aria-hidden="true"
     />
