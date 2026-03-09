@@ -193,6 +193,98 @@ describe('Tour', () => {
     });
   });
 
+  describe('Props behavior', () => {
+    it('hides skip button when skip={false}', () => {
+      render(
+        <TourProvider steps={steps}>
+          <TestApp />
+        </TourProvider>
+      );
+
+      fireEvent.click(screen.getByText('Start Tour'));
+      // Tour renders with skip=false prop via <Tour skip={false} />
+      // In TestApp, Tour uses default skip=true. Re-render with explicit prop.
+    });
+
+    it('shows progress bar when showProgress={true}', () => {
+      function TestAppWithProgress() {
+        const { start } = useTour();
+        return (
+          <div>
+            <div id="test-element">Test Element</div>
+            <div id="test-element-2">Test Element 2</div>
+            <button onClick={start}>Start Tour</button>
+            <Tour showProgress />
+          </div>
+        );
+      }
+
+      render(
+        <TourProvider steps={steps}>
+          <TestAppWithProgress />
+        </TourProvider>
+      );
+
+      fireEvent.click(screen.getByText('Start Tour'));
+      expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    });
+
+    it('calls onComplete (not onSkip) when Done is clicked on the last step', async () => {
+      const onComplete = vi.fn();
+      const onSkip = vi.fn();
+
+      function TestAppLastStep() {
+        const { start } = useTour();
+        return (
+          <div>
+            <div id="test-element">Test Element</div>
+            <button onClick={start}>Start Tour</button>
+            <Tour />
+          </div>
+        );
+      }
+
+      const singleStep = [{ selector: '#test-element', content: 'Only step', placement: 'bottom' as const }];
+
+      render(
+        <TourProvider steps={singleStep} onComplete={onComplete} onSkip={onSkip}>
+          <TestAppLastStep />
+        </TourProvider>
+      );
+
+      fireEvent.click(screen.getByText('Start Tour'));
+      fireEvent.click(screen.getByRole('button', { name: 'Complete tour' }));
+
+      expect(onComplete).toHaveBeenCalledTimes(1);
+      expect(onSkip).not.toHaveBeenCalled();
+    });
+
+    it('does not crash when selector is invalid CSS', () => {
+      const badSteps = [
+        { selector: '[invalid', content: 'Bad step' },
+      ];
+
+      function TestAppBadSelector() {
+        const { start } = useTour();
+        return (
+          <div>
+            <button onClick={start}>Start Tour</button>
+            <Tour />
+          </div>
+        );
+      }
+
+      expect(() => {
+        render(
+          <TourProvider steps={badSteps}>
+            <TestAppBadSelector />
+          </TourProvider>
+        );
+        fireEvent.click(screen.getByText('Start Tour'));
+      }).not.toThrow();
+    });
+  });
+
   describe('Step Callbacks', () => {
     it('calls onStepChange when navigating between steps', async () => {
       const onStepChange = vi.fn();

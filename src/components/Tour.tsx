@@ -69,14 +69,23 @@ export const Tour: React.FC<TourProps> = ({
     if (!isActive) return;
 
     const currentStepData = steps[currentStep];
-    const element = document.querySelector(currentStepData.selector);
+    let element: Element | null = null;
+    try {
+      element = document.querySelector(currentStepData.selector);
+    } catch {
+      return;
+    }
 
     if (element) {
       setTargetElement(element);
     } else if (currentStepData.waitFor) {
       currentStepData.waitFor().then(() => {
-        const element = document.querySelector(currentStepData.selector);
-        setTargetElement(element);
+        try {
+          const el = document.querySelector(currentStepData.selector);
+          setTargetElement(el);
+        } catch {
+          // invalid selector — leave targetElement null
+        }
       });
     }
   }, [isActive, currentStep, steps]);
@@ -93,7 +102,7 @@ export const Tour: React.FC<TourProps> = ({
       onNext={next}
       onBack={back}
       onSkip={skipTour}
-      onComplete={skipTour}
+      onComplete={next}
       isFirstStep={currentStep === 0}
       isLastStep={currentStep === steps.length - 1}
       overlayClassName={overlayClassName}

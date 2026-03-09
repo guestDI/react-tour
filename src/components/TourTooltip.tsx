@@ -69,6 +69,36 @@ const getMediaSource = (value: ReactNode | MediaSource): string => {
   return String(value);
 };
 
+const ImageContent: React.FC<{ src: string; props?: Record<string, unknown> }> = ({ src, props }) => {
+  const [hasError, setHasError] = useState(false);
+  if (hasError) return <MediaFallback type="image" className="w-full h-auto" />;
+  return (
+    <img
+      src={src}
+      alt="Tour content"
+      className="w-full h-auto rounded-lg"
+      onError={() => setHasError(true)}
+      {...props}
+    />
+  );
+};
+
+const VideoContent: React.FC<{ src: string; props?: Record<string, unknown> }> = ({ src, props }) => {
+  const [hasError, setHasError] = useState(false);
+  if (hasError) return <MediaFallback type="video" className="w-full h-auto" />;
+  return (
+    <video
+      src={src}
+      controls
+      className="w-full h-auto rounded-lg"
+      role="presentation"
+      aria-label="Tour video content"
+      onError={() => setHasError(true)}
+      {...props}
+    />
+  );
+};
+
 /**
  * Renders the content based on its type
  * @param content - The content to render
@@ -76,52 +106,24 @@ const getMediaSource = (value: ReactNode | MediaSource): string => {
  */
 const renderContent = (content: TourTooltipProps['content']): React.ReactNode => {
   if (!content) return null;
-  
+
   if (typeof content === 'string' || React.isValidElement(content)) {
     return content;
   }
 
   const contentObj = content as unknown;
   if (
-    typeof contentObj === 'object' && 
-    contentObj !== null && 
-    'type' in contentObj && 
+    typeof contentObj === 'object' &&
+    contentObj !== null &&
+    'type' in contentObj &&
     'value' in contentObj
   ) {
     const typedContent = contentObj as ContentType;
     switch (typedContent.type) {
-      case 'image': {
-        const [hasError, setHasError] = useState(false);
-        if (hasError) {
-          return <MediaFallback type="image" className="w-full h-auto" />;
-        }
-        return (
-          <img
-            src={getMediaSource(typedContent.value)}
-            alt="Tour content"
-            className="w-full h-auto rounded-lg"
-            onError={() => setHasError(true)}
-            {...typedContent.props}
-          />
-        );
-      }
-      case 'video': {
-        const [hasError, setHasError] = useState(false);
-        if (hasError) {
-          return <MediaFallback type="video" className="w-full h-auto" />;
-        }
-        return (
-          <video
-            src={getMediaSource(typedContent.value)}
-            controls
-            className="w-full h-auto rounded-lg"
-            role="presentation"
-            aria-label="Tour video content"
-            onError={() => setHasError(true)}
-            {...typedContent.props}
-          />
-        );
-      }
+      case 'image':
+        return <ImageContent src={getMediaSource(typedContent.value)} props={typedContent.props} />;
+      case 'video':
+        return <VideoContent src={getMediaSource(typedContent.value)} props={typedContent.props} />;
       case 'custom':
         return typedContent.value as React.ReactNode;
       case 'text':
