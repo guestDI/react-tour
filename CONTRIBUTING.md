@@ -16,8 +16,8 @@ Thank you for your interest in contributing to our Product Tour component! This 
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
-- npm or yarn
+- Node.js (v18 or higher)
+- npm
 - Git
 
 ### Installation
@@ -31,8 +31,6 @@ Thank you for your interest in contributing to our Product Tour component! This 
 3. Install dependencies:
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
 ### Development Workflow
@@ -47,30 +45,30 @@ Thank you for your interest in contributing to our Product Tour component! This 
 2. Start the development server:
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
 3. Run tests:
    ```bash
    npm test
-   # or
-   yarn test
    ```
 
 ## Project Structure
 
 ```
-product-tour/
+react-tour/
 ├── src/
-│   ├── components/     # React components
-│   ├── context/       # React context providers
-│   ├── styles/        # CSS and theme files
-│   ├── types/         # TypeScript type definitions
-│   └── stories/       # Storybook stories
-├── tests/             # Test files
-├── docs/              # Documentation
-└── examples/          # Example implementations
+│   ├── components/          # React components
+│   │   └── __tests__/       # Component unit tests
+│   ├── context/             # React context and TourProvider
+│   │   └── __tests__/       # Context unit tests
+│   ├── hooks/               # Custom React hooks
+│   ├── manager/             # Global TourManager singleton
+│   │   └── __tests__/       # Manager unit tests
+│   ├── styles/              # CSS files (theme.css)
+│   ├── types/               # TypeScript type definitions
+│   └── stories/             # Storybook stories
+├── dist/                    # Build output (generated)
+└── examples/                # Example implementations
 ```
 
 ## Coding Standards
@@ -93,11 +91,10 @@ product-tour/
 
 ### CSS
 
-- Use Tailwind CSS for styling
-- Follow BEM naming convention for custom classes
-- Use CSS variables for theming
-- Support dark mode
-- Ensure responsive design
+- The library uses plain CSS with CSS variables for theming (see `src/styles/theme.css`)
+- All CSS variables follow the `--tour--[component]--[property]` naming convention
+- Support dark mode via the `.dark` class on a parent element
+- Do not use Tailwind CSS utility classes in library source — Tailwind is only used in the demo app
 
 ### Accessibility
 

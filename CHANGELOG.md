@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-03-09
+
+### Fixed
+
+- **Critical:** `useState` was called inside a plain helper function `renderContent` in `TourTooltip`, violating React's Rules of Hooks. Extracted `ImageContent` and `VideoContent` as proper React sub-components to fix the crash that occurred when content type changed between steps.
+- **Critical:** `onComplete` prop in `Tour` was incorrectly wired to `skipTour`, causing the user-provided `onComplete` callback to never fire when clicking "Done" on the last step (it fired `onSkip` instead). Changed to `onComplete={next}`, which already handles the last-step case.
+- **Critical:** CSS styles were not applied in consumer apps due to `"sideEffects": false` in `package.json`, which caused bundlers (webpack/Vite) to tree-shake away all CSS imports. Changed to `"sideEffects": ["**/*.css"]`.
+- Invalid CSS selectors passed as `selector` on a step now fail silently instead of throwing an uncaught `SyntaxError` that crashed the component tree.
+
+### Changed
+
+- CSS is now auto-imported when the library is imported — no separate CSS import required in consumer apps.
+- Removed obsolete `src/styles/tour.css` which had duplicate class definitions with inconsistent CSS variable names that conflicted with `theme.css`.
+- Build now uses tsup's native CSS bundling instead of manually copying CSS files. `dist/index.css` is generated automatically.
+- Simplified `package.json` exports: CSS is now accessible as `import 'react-product-tour-guide/styles'` instead of the internal `dist/` path.
+
+### Added
+
+- Unit tests for `TourTooltip` component (20 tests): all content types, image/video error fallbacks, button callbacks, custom button config, ARIA attributes.
+- Unit tests for `TourManager` singleton (13 tests): initialize, start, stop, next, back, skip, subscribe/unsubscribe.
+- Additional `TourContext` tests: `defaultActive` prop, `back()` no-op on first step, `useTour` throws outside provider, `waitFor` is awaited before step advances.
+- Additional `Tour` integration tests: `onComplete` callback correctness, `showProgress` prop, `skip={false}` prop, invalid selector safety.
+
 ## [0.1.0] - 2024-03-19
 
 ### Added
