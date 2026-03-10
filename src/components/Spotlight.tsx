@@ -145,6 +145,7 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
         targetRect={rect}
         overlayClassName={overlayClassName}
         isPartialBlur={isPartialBlur}
+        hasHighlight={!!highlightTarget}
       />
 
       {highlightTarget && (

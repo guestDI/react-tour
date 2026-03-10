@@ -15,6 +15,7 @@
   ],
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/generate-styles.mjs",
     "build": "tsup",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -107,13 +108,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": ["**/*.css"],
+  "sideEffects": ["./src/styles/inject.ts", "./dist/index.js", "./dist/index.mjs"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    },
-    "./styles": "./dist/index.css"
+    }
   }
 }

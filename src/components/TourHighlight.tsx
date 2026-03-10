@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { clsx } from 'clsx';
 import type { HighlightConfig } from '../types';
 
+const HIGHLIGHT_PADDING = 8;
+
 interface TourHighlightProps {
   targetRect: DOMRect;
   scrollLeft: number;
@@ -12,15 +14,12 @@ interface TourHighlightProps {
 
 export const TourHighlight: React.FC<TourHighlightProps> = ({
   targetRect,
-  scrollLeft,
-  scrollTop,
   highlightConfig,
   animation = 'slide',
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Add a small delay to ensure the initial position is set
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 50);
@@ -34,16 +33,15 @@ export const TourHighlight: React.FC<TourHighlightProps> = ({
   return (
     <div
       style={{
-        position: 'absolute',
-        top: targetRect.top + scrollTop - 4,
-        left: targetRect.left + scrollLeft - 4,
-        width: targetRect.width + 8,
-        height: targetRect.height + 8,
-        isolation: 'isolate',
+        position: 'fixed',
+        top: targetRect.top - HIGHLIGHT_PADDING,
+        left: targetRect.left - HIGHLIGHT_PADDING,
+        width: targetRect.width + HIGHLIGHT_PADDING * 2,
+        height: targetRect.height + HIGHLIGHT_PADDING * 2,
         ...highlightConfig.style,
       }}
       className={clsx(
-        'fixed z-50 transition-all duration-200',
+        'tour-highlight z-50',
         highlightConfig.className,
         { visible: isVisible }
       )}

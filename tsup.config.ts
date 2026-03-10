@@ -20,4 +20,4 @@ export default defineConfig({
       js: format === 'cjs' ? '.js' : '.mjs',
     };
   }
-}); 
+});

@@ -1,4 +1,5 @@
-@layer react-product-tour {
+// AUTO-GENERATED — do not edit. Run `npm run build` to regenerate.
+const __tourStyles__ = `@layer react-product-tour {
 
 :root {
   /* Tour Component Colors */
@@ -362,3 +363,14 @@
 }
 
 } /* end @layer react-product-tour */
+`;
+
+if (typeof document !== 'undefined') {
+  const id = '__react_product_tour_styles__';
+  if (!document.getElementById(id)) {
+    const style = document.createElement('style');
+    style.id = id;
+    style.textContent = __tourStyles__;
+    document.head.insertBefore(style, document.head.firstChild);
+  }
+}

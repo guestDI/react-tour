@@ -1,4 +1,4 @@
-import './styles/theme.css';
+import './styles/inject';
 
 export { TourProvider } from './context/TourContext';
 export { useTour } from './hooks/useTour';

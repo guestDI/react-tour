@@ -5,12 +5,14 @@ interface TourOverlayProps {
   targetRect: DOMRect;
   overlayClassName?: string;
   isPartialBlur?: boolean;
+  /** When true a highlight element provides the spotlight via box-shadow — skip the solid overlay */
+  hasHighlight?: boolean;
 }
 
 export const TourOverlay: React.FC<TourOverlayProps> = ({
-  targetRect,
   overlayClassName,
   isPartialBlur,
+  hasHighlight,
 }) => {
   return (
     <>
@@ -26,15 +28,16 @@ export const TourOverlay: React.FC<TourOverlayProps> = ({
         />
       )}
 
-      {/* Spotlight cutout */}
-      <div
-        className={clsx('tour-overlay fixed inset-0 z-40', overlayClassName)}
-        style={{
-          clipPath: `path('M0 0H100%V100%H0V0z M${targetRect.left} ${targetRect.top}H${targetRect.right}V${targetRect.bottom}H${targetRect.left}V${targetRect.top}z')`,
-        }}
-        role="presentation"
-        aria-hidden="true"
-      />
+      {/* Plain full-screen overlay — only shown when there is no highlight element.
+          When a highlight is present its box-shadow creates the dark surround instead,
+          which naturally follows border-radius for a rounded spotlight. */}
+      {!hasHighlight && (
+        <div
+          className={clsx('tour-overlay fixed inset-0 z-40', overlayClassName)}
+          role="presentation"
+          aria-hidden="true"
+        />
+      )}
     </>
   );
 }; 
