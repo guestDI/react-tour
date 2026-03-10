@@ -72,16 +72,10 @@ exports[`Spotlight snapshots > first step 1`] = `
   </div>
   <div
     aria-hidden="true"
-    class="tour-overlay fixed inset-0 z-40"
-    role="presentation"
-    style="clip-path: path('M0 0H100%V100%H0V0z M200 100H400V300H200V100z');"
-  />
-  <div
-    aria-hidden="true"
-    class="fixed z-50 transition-all duration-200 tour-highlight"
+    class="tour-highlight z-50 tour-highlight"
     data-animation="slide"
     role="presentation"
-    style="position: absolute; top: 96px; left: 196px; width: 208px; height: 208px; isolation: isolate;"
+    style="position: fixed; top: 92px; left: 192px; width: 216px; height: 216px;"
   />
   <div
     aria-describedby="tour-step-content"
@@ -129,13 +123,6 @@ exports[`Spotlight snapshots > first step 1`] = `
       </button>
     </div>
   </div>
-  <div
-    aria-label="Tour navigation instructions"
-    class="sr-only"
-    role="complementary"
-  >
-    Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
-  </div>
 </div>
 `;
 
@@ -151,16 +138,10 @@ exports[`Spotlight snapshots > last step 1`] = `
   </div>
   <div
     aria-hidden="true"
-    class="tour-overlay fixed inset-0 z-40"
-    role="presentation"
-    style="clip-path: path('M0 0H100%V100%H0V0z M200 100H400V300H200V100z');"
-  />
-  <div
-    aria-hidden="true"
-    class="fixed z-50 transition-all duration-200 tour-highlight"
+    class="tour-highlight z-50 tour-highlight"
     data-animation="slide"
     role="presentation"
-    style="position: absolute; top: 96px; left: 196px; width: 208px; height: 208px; isolation: isolate;"
+    style="position: fixed; top: 92px; left: 192px; width: 216px; height: 216px;"
   />
   <div
     aria-describedby="tour-step-content"
@@ -214,13 +195,6 @@ exports[`Spotlight snapshots > last step 1`] = `
       </button>
     </div>
   </div>
-  <div
-    aria-label="Tour navigation instructions"
-    class="sr-only"
-    role="complementary"
-  >
-    Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
-  </div>
 </div>
 `;
 
@@ -236,16 +210,10 @@ exports[`Spotlight snapshots > mid-tour default 1`] = `
   </div>
   <div
     aria-hidden="true"
-    class="tour-overlay fixed inset-0 z-40"
-    role="presentation"
-    style="clip-path: path('M0 0H100%V100%H0V0z M200 100H400V300H200V100z');"
-  />
-  <div
-    aria-hidden="true"
-    class="fixed z-50 transition-all duration-200 tour-highlight"
+    class="tour-highlight z-50 tour-highlight"
     data-animation="slide"
     role="presentation"
-    style="position: absolute; top: 96px; left: 196px; width: 208px; height: 208px; isolation: isolate;"
+    style="position: fixed; top: 92px; left: 192px; width: 216px; height: 216px;"
   />
   <div
     aria-describedby="tour-step-content"
@@ -299,13 +267,6 @@ exports[`Spotlight snapshots > mid-tour default 1`] = `
       </button>
     </div>
   </div>
-  <div
-    aria-label="Tour navigation instructions"
-    class="sr-only"
-    role="complementary"
-  >
-    Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
-  </div>
 </div>
 `;
 
@@ -321,16 +282,10 @@ exports[`Spotlight snapshots > skip hidden 1`] = `
   </div>
   <div
     aria-hidden="true"
-    class="tour-overlay fixed inset-0 z-40"
-    role="presentation"
-    style="clip-path: path('M0 0H100%V100%H0V0z M200 100H400V300H200V100z');"
-  />
-  <div
-    aria-hidden="true"
-    class="fixed z-50 transition-all duration-200 tour-highlight"
+    class="tour-highlight z-50 tour-highlight"
     data-animation="slide"
     role="presentation"
-    style="position: absolute; top: 96px; left: 196px; width: 208px; height: 208px; isolation: isolate;"
+    style="position: fixed; top: 92px; left: 192px; width: 216px; height: 216px;"
   />
   <div
     aria-describedby="tour-step-content"
@@ -378,13 +333,6 @@ exports[`Spotlight snapshots > skip hidden 1`] = `
       </button>
     </div>
   </div>
-  <div
-    aria-label="Tour navigation instructions"
-    class="sr-only"
-    role="complementary"
-  >
-    Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
-  </div>
 </div>
 `;
 
@@ -400,16 +348,10 @@ exports[`Spotlight snapshots > with custom classes 1`] = `
   </div>
   <div
     aria-hidden="true"
-    class="tour-overlay fixed inset-0 z-40 bg-violet-900/70"
-    role="presentation"
-    style="clip-path: path('M0 0H100%V100%H0V0z M200 100H400V300H200V100z');"
-  />
-  <div
-    aria-hidden="true"
-    class="fixed z-50 transition-all duration-200 tour-highlight"
+    class="tour-highlight z-50 tour-highlight"
     data-animation="slide"
     role="presentation"
-    style="position: absolute; top: 96px; left: 196px; width: 208px; height: 208px; isolation: isolate;"
+    style="position: fixed; top: 92px; left: 192px; width: 216px; height: 216px;"
   />
   <div
     aria-describedby="tour-step-content"
@@ -463,13 +405,6 @@ exports[`Spotlight snapshots > with custom classes 1`] = `
       </button>
     </div>
   </div>
-  <div
-    aria-label="Tour navigation instructions"
-    class="sr-only"
-    role="complementary"
-  >
-    Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
-  </div>
 </div>
 `;
 
@@ -485,16 +420,10 @@ exports[`Spotlight snapshots > with progress bar 1`] = `
   </div>
   <div
     aria-hidden="true"
-    class="tour-overlay fixed inset-0 z-40"
-    role="presentation"
-    style="clip-path: path('M0 0H100%V100%H0V0z M200 100H400V300H200V100z');"
-  />
-  <div
-    aria-hidden="true"
-    class="fixed z-50 transition-all duration-200 tour-highlight"
+    class="tour-highlight z-50 tour-highlight"
     data-animation="slide"
     role="presentation"
-    style="position: absolute; top: 96px; left: 196px; width: 208px; height: 208px; isolation: isolate;"
+    style="position: fixed; top: 92px; left: 192px; width: 216px; height: 216px;"
   />
   <div
     aria-describedby="tour-step-content"
@@ -564,13 +493,6 @@ exports[`Spotlight snapshots > with progress bar 1`] = `
       </button>
     </div>
   </div>
-  <div
-    aria-label="Tour navigation instructions"
-    class="sr-only"
-    role="complementary"
-  >
-    Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
-  </div>
 </div>
 `;
 
@@ -588,7 +510,6 @@ exports[`TourOverlay snapshots > standard overlay 1`] = `
   aria-hidden="true"
   class="tour-overlay fixed inset-0 z-40"
   role="presentation"
-  style="clip-path: path('M0 0H100%V100%H0V0z M200 100H400V300H200V100z');"
 />
 `;
 
@@ -597,7 +518,6 @@ exports[`TourOverlay snapshots > with custom overlay class 1`] = `
   aria-hidden="true"
   class="tour-overlay fixed inset-0 z-40 bg-indigo-900/60"
   role="presentation"
-  style="clip-path: path('M0 0H100%V100%H0V0z M200 100H400V300H200V100z');"
 />
 `;
 

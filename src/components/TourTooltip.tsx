@@ -69,13 +69,13 @@ const getMediaSource = (value: ReactNode | MediaSource): string => {
   return String(value);
 };
 
-const ImageContent: React.FC<{ src: string; props?: Record<string, unknown> }> = ({ src, props }) => {
+const ImageContent: React.FC<{ src: string; alt?: string; props?: Record<string, unknown> }> = ({ src, alt = 'Tour content', props }) => {
   const [hasError, setHasError] = useState(false);
   if (hasError) return <MediaFallback type="image" className="w-full h-auto" />;
   return (
     <img
       src={src}
-      alt="Tour content"
+      alt={alt}
       className="w-full h-auto rounded-lg"
       onError={() => setHasError(true)}
       {...props}
@@ -121,7 +121,7 @@ const renderContent = (content: TourTooltipProps['content']): React.ReactNode =>
     const typedContent = contentObj as ContentType;
     switch (typedContent.type) {
       case 'image':
-        return <ImageContent src={getMediaSource(typedContent.value)} props={typedContent.props} />;
+        return <ImageContent src={getMediaSource(typedContent.value)} alt={typedContent.alt} props={typedContent.props} />;
       case 'video':
         return <VideoContent src={getMediaSource(typedContent.value)} props={typedContent.props} />;
       case 'custom':

@@ -10,6 +10,7 @@ export type MediaSource = {
 export interface ContentType {
   type: 'text' | 'image' | 'video' | 'custom';
   value: ReactNode | MediaSource;
+  alt?: string;
   props?: Record<string, unknown>;
 }
 
@@ -109,7 +110,6 @@ export interface UseTourAccessibilityOptions {
 
 export interface UseTourAccessibilityReturn {
   LiveRegion: () => React.ReactElement;
-  createFocusTrap: (element: HTMLElement) => () => void;
   targetLabel: string;
 }
 

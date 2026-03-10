@@ -2,7 +2,6 @@ import React from 'react';
 import { clsx } from 'clsx';
 
 interface TourOverlayProps {
-  targetRect: DOMRect;
   overlayClassName?: string;
   isPartialBlur?: boolean;
   /** When true a highlight element provides the spotlight via box-shadow — skip the solid overlay */

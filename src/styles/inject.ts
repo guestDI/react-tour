@@ -21,7 +21,6 @@ const __tourStyles__ = `@layer react-product-tour {
   --tour--tooltip--transition: all 0.2s ease-in-out;
 
   /* Tour Highlight */
-  --tour--highlight--padding: 8px;
   --tour--highlight--radius: 10px;
 
   /* Tour Button Colors */

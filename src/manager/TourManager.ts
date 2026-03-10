@@ -30,7 +30,7 @@ class TourManager {
   }
 
   getState(): TourState {
-    return { ...this.state };
+    return { ...this.state, steps: [...this.state.steps] };
   }
 
   initialize(steps: TourStep[]) {

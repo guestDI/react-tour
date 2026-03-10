@@ -144,7 +144,7 @@ describe('Tour', () => {
       expect(skipButton).toHaveClass('tour-button-secondary');
     });
 
-    it('applies custom overlay class', () => {
+    it('renders highlight instead of overlay when highlightTarget is true', () => {
       render(
         <TourProvider steps={steps}>
           <TestApp />
@@ -154,9 +154,10 @@ describe('Tour', () => {
       // Start the tour
       fireEvent.click(screen.getByText('Start Tour'));
 
-      // Check if overlay class is applied
-      const overlay = document.querySelector('.tour-overlay');
-      expect(overlay).toHaveClass('tour-overlay');
+      // When highlightTarget is active, the solid overlay is suppressed in favour of
+      // the highlight element whose box-shadow creates the darkened surround.
+      expect(document.querySelector('.tour-overlay')).toBeNull();
+      expect(document.querySelector('.tour-highlight')).toBeInTheDocument();
     });
 
     it('applies highlight styles to target element', async () => {

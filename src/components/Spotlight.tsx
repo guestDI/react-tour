@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
 import type { SpotlightProps, ButtonConfig, ButtonLayoutConfig } from '../types';
 import { TourTooltip } from './TourTooltip';
@@ -108,32 +108,34 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
   const highlightConfig = typeof highlightTarget === 'object' ? highlightTarget : { className: 'tour-highlight' };
   const isPartialBlur = overlayClassName?.includes('tour-overlay-partial-blur');
 
-  const rect = targetElement?.getBoundingClientRect();
-  const scrollLeft = window.scrollX;
-  const scrollTop = window.scrollY;
+  // Reactive rect — kept in sync with scroll and resize
+  const [rect, setRect] = useState<DOMRect | null>(null);
 
   // Debounce the update function
   const debouncedUpdate = useDebounce(update, 100);
 
+  // When step changes: scroll into view, register Floating UI reference, snapshot rect
   useEffect(() => {
-    if (targetElement) {
-      tooltipRefs.setReference(targetElement);
-    }
+    if (!targetElement) return;
+    tooltipRefs.setReference(targetElement);
+    targetElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+    setRect(targetElement.getBoundingClientRect());
   }, [targetElement, tooltipRefs]);
 
-  // Add debounced scroll and resize handlers
+  // Keep rect in sync while the page scrolls (incl. during smooth-scroll animation)
   useEffect(() => {
-    const handleScroll = () => debouncedUpdate();
-    const handleResize = () => debouncedUpdate();
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleResize, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
+    if (!targetElement) return;
+    const updateRect = () => {
+      setRect(targetElement.getBoundingClientRect());
+      debouncedUpdate();
     };
-  }, [debouncedUpdate]);
+    window.addEventListener('scroll', updateRect, { passive: true });
+    window.addEventListener('resize', updateRect, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', updateRect);
+      window.removeEventListener('resize', updateRect);
+    };
+  }, [targetElement, debouncedUpdate]);
 
   if (!targetElement || !rect) return null;
 
@@ -142,7 +144,6 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
       {accessibility.enableScreenReader !== false && <LiveRegion />}
 
       <TourOverlay
-        targetRect={rect}
         overlayClassName={overlayClassName}
         isPartialBlur={isPartialBlur}
         hasHighlight={!!highlightTarget}
@@ -151,8 +152,6 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
       {highlightTarget && (
         <TourHighlight
           targetRect={rect}
-          scrollLeft={scrollLeft}
-          scrollTop={scrollTop}
           highlightConfig={highlightConfig}
           animation={animation}
         />
@@ -196,16 +195,6 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
         buttonConfig={buttonConfig}
       />
 
-      {/* Navigation instructions for screen readers */}
-      {accessibility.enableScreenReader !== false && (
-        <div 
-          role="complementary" 
-          aria-label="Tour navigation instructions" 
-          className="sr-only"
-        >
-          Use arrow keys to navigate between steps. Press Enter to proceed, Escape to skip the tour.
-        </div>
-      )}
     </>
   );
 }); 

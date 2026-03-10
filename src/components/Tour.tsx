@@ -45,7 +45,7 @@ export const Tour: React.FC<TourProps> = ({
       
       // Clean up announcement after a delay
       setTimeout(() => {
-        document.body.removeChild(announcement);
+        if (announcement.isConnected) document.body.removeChild(announcement);
       }, 3000);
 
       return () => {
@@ -57,9 +57,9 @@ export const Tour: React.FC<TourProps> = ({
         endAnnouncement.className = 'sr-only';
         endAnnouncement.textContent = announcements.end;
         document.body.appendChild(endAnnouncement);
-        
+
         setTimeout(() => {
-          document.body.removeChild(endAnnouncement);
+          if (endAnnouncement.isConnected) document.body.removeChild(endAnnouncement);
         }, 3000);
       };
     }
@@ -69,6 +69,8 @@ export const Tour: React.FC<TourProps> = ({
     if (!isActive) return;
 
     const currentStepData = steps[currentStep];
+    if (!currentStepData) return;
+
     let element: Element | null = null;
     try {
       element = document.querySelector(currentStepData.selector);
@@ -79,20 +81,23 @@ export const Tour: React.FC<TourProps> = ({
     if (element) {
       setTargetElement(element);
     } else if (currentStepData.waitFor) {
+      const stepIndexAtCallTime = currentStep;
       currentStepData.waitFor().then(() => {
+        if (stepIndexAtCallTime !== currentStep) return; // step changed while waiting
         try {
-          const el = document.querySelector(currentStepData.selector);
+          const el = document.querySelector(steps[stepIndexAtCallTime].selector);
           setTargetElement(el);
         } catch {
           // invalid selector — leave targetElement null
         }
+      }).catch(() => {
+        // waitFor rejected — leave targetElement null for this step
       });
     }
   }, [isActive, currentStep, steps]);
 
-  if (!isActive || !targetElement) return null;
-
   const currentStepData = steps[currentStep];
+  if (!isActive || !targetElement || !currentStepData) return null;
 
   return createPortal(
     <Spotlight

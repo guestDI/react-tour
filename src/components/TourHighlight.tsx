@@ -6,8 +6,6 @@ const HIGHLIGHT_PADDING = 8;
 
 interface TourHighlightProps {
   targetRect: DOMRect;
-  scrollLeft: number;
-  scrollTop: number;
   highlightConfig: HighlightConfig;
   animation?: 'slide' | 'bounce' | 'fade';
 }

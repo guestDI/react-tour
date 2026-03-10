@@ -85,7 +85,7 @@ function App() {
 | `tooltipClassName` | `string` | — | Class applied to the tooltip |
 | `buttonClassName` | `string` | — | Class applied to all buttons |
 | `buttonContainerClassName` | `string` | — | Class applied to the button container |
-| `highlightTarget` | `boolean \| HighlightConfig` | — | Highlight the target element |
+| `highlightTarget` | `boolean \| HighlightConfig` | `true` | Highlight the target element |
 | `accessibility` | `AccessibilityConfig` | — | Screen reader and focus options |
 | `buttonConfig` | `ButtonConfigObj` | — | Custom button content or render functions |
 
@@ -123,6 +123,7 @@ const {
 |----------|------|-------------|
 | `type` | `'text' \| 'image' \| 'video' \| 'custom'` | Content type |
 | `value` | `ReactNode \| string \| MediaSource` | Content value |
+| `alt` | `string` | Alt text for image content (default: `'Tour content'`) |
 | `props` | `Record<string, unknown>` | Extra props forwarded to the element |
 
 ### `MediaSource`
@@ -160,7 +161,8 @@ const {
   content: {
     type: 'image',
     value: 'https://example.com/screenshot.jpg',
-    props: { alt: 'Feature screenshot', className: 'rounded-lg' },
+    alt: 'Feature screenshot',
+    props: { className: 'rounded-lg' },
   },
 }
 ```
@@ -253,12 +255,24 @@ Add the `.dark` class to any ancestor element (typically `<html>`):
 
 ### Custom Classes
 
+Pass any CSS class names via the className props. When using **Tailwind**, prefix utilities with `!` to ensure they override the library's base styles:
+
 ```tsx
 <Tour
-  overlayClassName="bg-indigo-900/70"
-  tooltipClassName="bg-indigo-800 text-white border-indigo-600"
-  buttonClassName="rounded-full"
+  overlayClassName="!bg-indigo-900/70"
+  tooltipClassName="!bg-slate-900 !text-white !border-slate-700 !rounded-2xl"
+  buttonClassName="!rounded-full"
 />
+```
+
+Without Tailwind, plain CSS classes work when your rules are unlayered (unlayered styles always win over the library's `@layer react-product-tour` styles):
+
+```css
+.my-tooltip { background: #1e293b; color: #f1f5f9; border-radius: 1rem; }
+```
+
+```tsx
+<Tour tooltipClassName="my-tooltip" />
 ```
 
 ### Custom Button Rendering
@@ -368,7 +382,7 @@ npm test
 To update DOM snapshots after intentional UI changes:
 
 ```bash
-npm test -- --update-snapshots
+npm test -- -u
 ```
 
 ---

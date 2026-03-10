@@ -104,6 +104,8 @@ export const useTourAccessibility = ({
       const focusableElements = document.querySelectorAll(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
+      if (focusableElements.length === 0) return;
+
       const firstFocusableElement = focusableElements[0] as HTMLElement;
       const lastFocusableElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
