@@ -122,8 +122,11 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
   const highlightConfig = typeof highlightTarget === 'object' ? highlightTarget : { className: 'tour-highlight' };
   const isPartialBlur = overlayClassName?.includes('tour-overlay-partial-blur');
 
-  // Reactive rect — kept in sync with scroll and resize
-  const [rect, setRect] = useState<DOMRect | null>(null);
+  // Reactive rect — kept in sync with scroll and resize.
+  // Initialized eagerly so the first render is not null (avoids a flash of nothing in tests and on mount).
+  const [rect, setRect] = useState<DOMRect | null>(() =>
+    targetElement ? targetElement.getBoundingClientRect() : null
+  );
 
   // Debounce the update function; store in ref so listeners don't need it as a dep
   const debouncedUpdate = useDebounce(update, 100);
