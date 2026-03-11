@@ -37,6 +37,8 @@ interface TourTooltipProps {
   buttonContainerClassName?: string;
   /** Label for the target element */
   targetLabel: string;
+  /** Optional step title shown as a visible heading */
+  title?: string;
   /** Styles for floating positioning */
   floatingStyles: React.CSSProperties;
   /** Function to set the floating element reference */
@@ -248,6 +250,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
   buttonClassName,
   buttonContainerClassName,
   targetLabel,
+  title,
   floatingStyles,
   setFloating,
   showProgress = false,
@@ -281,11 +284,22 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
       data-placement={placement}
       data-animation={animation}
     >
-      <div id="tour-step-title" className="sr-only">
-        {`Tour Step: ${targetLabel}`}
-      </div>
+      {title ? (
+        <h3 id="tour-step-title" className="tour-tooltip-title">
+          {title}
+        </h3>
+      ) : (
+        <div id="tour-step-title" className="sr-only">
+          {`Tour Step: ${targetLabel}`}
+        </div>
+      )}
       {showProgress && currentStep !== undefined && totalSteps !== undefined && (
         <div className="mb-4">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs" style={{ opacity: 0.6 }} aria-hidden="true">
+              {`Step ${currentStep + 1} of ${totalSteps}`}
+            </span>
+          </div>
           <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
         </div>
       )}

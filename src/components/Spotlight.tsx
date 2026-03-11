@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState, memo, useRef, useMemo } from 'react';
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
 import type { SpotlightProps, ButtonConfig, ButtonLayoutConfig } from '../types';
 import { TourTooltip } from './TourTooltip';
@@ -51,12 +51,18 @@ interface SpotlightComponentProps extends SpotlightProps {
     focusTrap?: boolean;
   };
   animation?: 'slide' | 'bounce' | 'fade';
+  /** Distance in pixels between the tooltip and its target element */
+  tooltipOffset?: number;
   /** Button configuration */
   buttonConfig?: {
     primary?: ButtonConfig;
     secondary?: ButtonConfig;
     container?: ButtonLayoutConfig;
   };
+  /** Close the tour when the overlay is clicked */
+  dismissOnOverlayClick?: boolean;
+  /** Optional step title shown as a visible heading in the tooltip */
+  title?: string;
 }
 
 /**
@@ -85,11 +91,19 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
   showProgress = false,
   accessibility = {},
   animation = 'slide',
+  tooltipOffset = 10,
   buttonConfig,
+  dismissOnOverlayClick = true,
+  title,
 }) => {
+  const middleware = useMemo(
+    () => [offset(tooltipOffset), flip(), shift()],
+    [tooltipOffset]
+  );
+
   const { refs: tooltipRefs, floatingStyles, update } = useFloating({
     placement,
-    middleware: [offset(10), flip(), shift()],
+    middleware,
     whileElementsMounted: autoUpdate,
   });
 
@@ -111,8 +125,10 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
   // Reactive rect — kept in sync with scroll and resize
   const [rect, setRect] = useState<DOMRect | null>(null);
 
-  // Debounce the update function
+  // Debounce the update function; store in ref so listeners don't need it as a dep
   const debouncedUpdate = useDebounce(update, 100);
+  const debouncedUpdateRef = useRef(debouncedUpdate);
+  useEffect(() => { debouncedUpdateRef.current = debouncedUpdate; });
 
   // When step changes: scroll into view, register Floating UI reference, snapshot rect
   useEffect(() => {
@@ -127,7 +143,7 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
     if (!targetElement) return;
     const updateRect = () => {
       setRect(targetElement.getBoundingClientRect());
-      debouncedUpdate();
+      debouncedUpdateRef.current();
     };
     window.addEventListener('scroll', updateRect, { passive: true });
     window.addEventListener('resize', updateRect, { passive: true });
@@ -135,7 +151,7 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
       window.removeEventListener('scroll', updateRect);
       window.removeEventListener('resize', updateRect);
     };
-  }, [targetElement, debouncedUpdate]);
+  }, [targetElement]); // debouncedUpdate excluded — accessed via ref
 
   if (!targetElement || !rect) return null;
 
@@ -147,6 +163,7 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
         overlayClassName={overlayClassName}
         isPartialBlur={isPartialBlur}
         hasHighlight={!!highlightTarget}
+        onDismiss={dismissOnOverlayClick ? onSkip : undefined}
       />
 
       {highlightTarget && (
@@ -193,6 +210,7 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
         totalSteps={totalSteps}
         animation={animation}
         buttonConfig={buttonConfig}
+        title={title}
       />
 
     </>

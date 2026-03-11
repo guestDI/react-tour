@@ -2,60 +2,64 @@
 
 exports[`ProgressBar snapshots > last step (100%) 1`] = `
 <div
-  class="w-full h-1 bg-gray-200 rounded-full "
+  class="w-full h-1 rounded-full "
+  style="background: var(--tour--progress--background) var(--tour--progress--background);"
 >
   <div
     aria-valuemax="100"
     aria-valuemin="0"
     aria-valuenow="100"
-    class="h-full bg-rose-500 rounded-full transition-all duration-300 ease-in-out"
+    class="h-full rounded-full transition-all duration-300 ease-in-out"
     role="progressbar"
-    style="width: 100%;"
+    style="width: 100%; background: var(--tour--progress--fill) var(--tour--progress--fill);"
   />
 </div>
 `;
 
 exports[`ProgressBar snapshots > step 1 of 4 (25%) 1`] = `
 <div
-  class="w-full h-1 bg-gray-200 rounded-full "
+  class="w-full h-1 rounded-full "
+  style="background: var(--tour--progress--background) var(--tour--progress--background);"
 >
   <div
     aria-valuemax="100"
     aria-valuemin="0"
     aria-valuenow="25"
-    class="h-full bg-rose-500 rounded-full transition-all duration-300 ease-in-out"
+    class="h-full rounded-full transition-all duration-300 ease-in-out"
     role="progressbar"
-    style="width: 25%;"
+    style="width: 25%; background: var(--tour--progress--fill) var(--tour--progress--fill);"
   />
 </div>
 `;
 
 exports[`ProgressBar snapshots > step 2 of 4 (50%) 1`] = `
 <div
-  class="w-full h-1 bg-gray-200 rounded-full "
+  class="w-full h-1 rounded-full "
+  style="background: var(--tour--progress--background) var(--tour--progress--background);"
 >
   <div
     aria-valuemax="100"
     aria-valuemin="0"
     aria-valuenow="50"
-    class="h-full bg-rose-500 rounded-full transition-all duration-300 ease-in-out"
+    class="h-full rounded-full transition-all duration-300 ease-in-out"
     role="progressbar"
-    style="width: 50%;"
+    style="width: 50%; background: var(--tour--progress--fill) var(--tour--progress--fill);"
   />
 </div>
 `;
 
 exports[`ProgressBar snapshots > with custom class 1`] = `
 <div
-  class="w-full h-1 bg-gray-200 rounded-full h-2"
+  class="w-full h-1 rounded-full h-2"
+  style="background: var(--tour--progress--background) var(--tour--progress--background);"
 >
   <div
     aria-valuemax="100"
     aria-valuemin="0"
     aria-valuenow="66.66666666666666"
-    class="h-full bg-rose-500 rounded-full transition-all duration-300 ease-in-out"
+    class="h-full rounded-full transition-all duration-300 ease-in-out"
     role="progressbar"
-    style="width: 66.66666666666666%;"
+    style="width: 66.66666666666666%; background: var(--tour--progress--fill) var(--tour--progress--fill);"
   />
 </div>
 `;
@@ -445,15 +449,27 @@ exports[`Spotlight snapshots > with progress bar 1`] = `
       class="mb-4"
     >
       <div
-        class="w-full h-1 bg-gray-200 rounded-full "
+        class="flex justify-between items-center mb-1"
+      >
+        <span
+          aria-hidden="true"
+          class="text-xs"
+          style="opacity: 0.6;"
+        >
+          Step 2 of 4
+        </span>
+      </div>
+      <div
+        class="w-full h-1 rounded-full "
+        style="background: var(--tour--progress--background) var(--tour--progress--background);"
       >
         <div
           aria-valuemax="100"
           aria-valuemin="0"
           aria-valuenow="50"
-          class="h-full bg-rose-500 rounded-full transition-all duration-300 ease-in-out"
+          class="h-full rounded-full transition-all duration-300 ease-in-out"
           role="progressbar"
-          style="width: 50%;"
+          style="width: 50%; background: var(--tour--progress--fill) var(--tour--progress--fill);"
         />
       </div>
     </div>
@@ -1088,15 +1104,27 @@ exports[`TourTooltip snapshots > with progress bar 1`] = `
     class="mb-4"
   >
     <div
-      class="w-full h-1 bg-gray-200 rounded-full "
+      class="flex justify-between items-center mb-1"
+    >
+      <span
+        aria-hidden="true"
+        class="text-xs"
+        style="opacity: 0.6;"
+      >
+        Step 2 of 4
+      </span>
+    </div>
+    <div
+      class="w-full h-1 rounded-full "
+      style="background: var(--tour--progress--background) var(--tour--progress--background);"
     >
       <div
         aria-valuemax="100"
         aria-valuemin="0"
         aria-valuenow="50"
-        class="h-full bg-rose-500 rounded-full transition-all duration-300 ease-in-out"
+        class="h-full rounded-full transition-all duration-300 ease-in-out"
         role="progressbar"
-        style="width: 50%;"
+        style="width: 50%; background: var(--tour--progress--fill) var(--tour--progress--fill);"
       />
     </div>
   </div>

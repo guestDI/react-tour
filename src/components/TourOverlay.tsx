@@ -6,12 +6,15 @@ interface TourOverlayProps {
   isPartialBlur?: boolean;
   /** When true a highlight element provides the spotlight via box-shadow — skip the solid overlay */
   hasHighlight?: boolean;
+  /** Called when the overlay is clicked */
+  onDismiss?: () => void;
 }
 
 export const TourOverlay: React.FC<TourOverlayProps> = ({
   overlayClassName,
   isPartialBlur,
   hasHighlight,
+  onDismiss,
 }) => {
   return (
     <>
@@ -22,6 +25,7 @@ export const TourOverlay: React.FC<TourOverlayProps> = ({
           style={{
             mixBlendMode: 'multiply',
           }}
+          onClick={onDismiss}
           role="presentation"
           aria-hidden="true"
         />
@@ -33,10 +37,11 @@ export const TourOverlay: React.FC<TourOverlayProps> = ({
       {!hasHighlight && (
         <div
           className={clsx('tour-overlay fixed inset-0 z-40', overlayClassName)}
+          onClick={onDismiss}
           role="presentation"
           aria-hidden="true"
         />
       )}
     </>
   );
-}; 
+};

@@ -16,6 +16,7 @@ export interface ContentType {
 
 export interface TourStep {
   selector: string;
+  title?: string;
   content: ReactNode | ContentType;
   placement?: Placement;
   waitFor?: () => Promise<void>;
@@ -43,21 +44,6 @@ export interface AccessibilityConfig {
   focusTrap?: boolean;
 }
 
-export interface ComponentStyleProps {
-  className?: string;
-  style?: CSSProperties;
-}
-
-export interface TourStyleProps {
-  tooltip?: ComponentStyleProps;
-  overlay?: ComponentStyleProps;
-  button?: {
-    primary?: ComponentStyleProps;
-    secondary?: ComponentStyleProps;
-    container?: ComponentStyleProps;
-  };
-  highlight?: ComponentStyleProps;
-}
 
 export interface TourProviderProps {
   steps: TourStep[];
@@ -68,9 +54,6 @@ export interface TourProviderProps {
   onStepChange?: (stepIndex: number, step: TourStep) => void;
   onStepEnter?: (stepIndex: number, step: TourStep) => void;
   onStepExit?: (stepIndex: number, step: TourStep) => void;
-  showProgress?: boolean;
-  isRTL?: boolean;
-  accessibility?: AccessibilityConfig;
 }
 
 export interface HighlightConfig {
@@ -94,10 +77,12 @@ export interface SpotlightProps {
   buttonClassName?: string;
   buttonContainerClassName?: string;
   highlightTarget?: boolean | HighlightConfig;
+  title?: string;
   currentStep?: number;
   totalSteps?: number;
   showProgress?: boolean;
-  styles?: TourStyleProps;
+  tooltipOffset?: number;
+  dismissOnOverlayClick?: boolean;
 }
 
 export interface UseTourAccessibilityOptions {
@@ -165,10 +150,12 @@ export interface TourProps {
   skip?: boolean;
   /** Whether to show progress indicator */
   showProgress?: boolean;
-  /** Whether the tour is in RTL mode */
-  isRTL?: boolean;
   /** Animation type for the tooltip and highlight */
   animation?: 'slide' | 'bounce' | 'fade';
+  /** Distance in pixels between the tooltip and its target element (default: 10) */
+  tooltipOffset?: number;
+  /** Close the tour when the overlay is clicked (default: true) */
+  dismissOnOverlayClick?: boolean;
   /** Custom button configuration */
   buttonConfig?: {
     primary?: ButtonConfig;
@@ -193,5 +180,4 @@ export interface TourProps {
     /** Whether to trap focus within the tour */
     focusTrap?: boolean;
   };
-  styles?: TourStyleProps;
 }

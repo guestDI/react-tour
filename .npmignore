@@ -25,7 +25,6 @@ storybook/
 .storybook/
 
 # Build files
-dist/
 coverage/
 
 # Git

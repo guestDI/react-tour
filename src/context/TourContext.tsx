@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
 import type { TourContextValue, TourProviderProps } from '../types';
 import { tourManager } from '../manager/TourManager';
 
@@ -70,7 +70,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     onSkip?.();
   }, [stop, onSkip]);
 
-  const value: TourContextValue = {
+  const value = useMemo<TourContextValue>(() => ({
     steps,
     currentStep,
     isActive,
@@ -79,7 +79,7 @@ export const TourProvider: React.FC<TourProviderProps> = ({
     next,
     back,
     skip,
-  };
+  }), [steps, currentStep, isActive, start, stop, next, back, skip]);
 
   return (
     <TourContext.Provider value={value}>

@@ -14,11 +14,9 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "dev": "vite",
     "prebuild": "node scripts/generate-styles.mjs",
     "build": "tsup",
     "lint": "eslint .",
-    "preview": "vite preview",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
@@ -32,7 +30,6 @@
     "react-dom": "^18.0.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.6.1",
     "@floating-ui/react": "^0.26.4",
     "clsx": "^2.1.0"
   },
@@ -108,7 +105,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": ["./src/styles/inject.ts", "./dist/index.js", "./dist/index.mjs"],
+  "sideEffects": ["./src/styles/inject.ts", "**/*.css"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

@@ -39,12 +39,13 @@ const LiveRegion: React.FC<LiveRegionProps> = ({
   useEffect(() => {
     if (!isActive || !ref.current) return;
 
-    const defaultStepAnnouncement = `Step ${currentStep + 1} of ${totalSteps}: ${targetLabel}. ${content}`;
+    const contentText = typeof content === 'string' ? content : '';
+    const defaultStepAnnouncement = `Step ${currentStep + 1} of ${totalSteps}: ${targetLabel}.${contentText ? ` ${contentText}` : ''}`;
     const stepAnnouncement = announcements?.step
       ? announcements.step
           .replace('{step}', String(currentStep + 1))
           .replace('{total}', String(totalSteps))
-          .replace('{content}', String(content))
+          .replace('{content}', contentText)
       : defaultStepAnnouncement;
 
     ref.current.textContent = stepAnnouncement;
@@ -73,32 +74,30 @@ export const useTourAccessibility = ({
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!isActive || !enableScreenReader) return;
+    if (!isActive || focusManagement === 'manual') return;
 
     // Store the previously focused element
     previousFocusRef.current = document.activeElement as HTMLElement;
 
-    // Focus the first focusable element in the tour
-    if (focusManagement === 'auto') {
-      const focusableElements = document.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      if (focusableElements.length > 0) {
-        (focusableElements[0] as HTMLElement).focus();
-      }
+    // Auto-focus the first focusable element in the tour dialog
+    const focusableElements = document.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusableElements.length > 0) {
+      (focusableElements[0] as HTMLElement).focus();
     }
 
     return () => {
-      // Restore focus when tour ends
-      if (previousFocusRef.current) {
+      // Restore focus when tour ends — validate element is still in the DOM
+      if (previousFocusRef.current && document.contains(previousFocusRef.current)) {
         previousFocusRef.current.focus();
       }
     };
-  }, [isActive, enableScreenReader, focusManagement]);
+  }, [isActive, focusManagement]);
 
-  // Create focus trap
+  // Create focus trap — active whenever focusTrap is true, independent of screen reader mode
   useEffect(() => {
-    if (!isActive || !focusTrap || !enableScreenReader) return;
+    if (!isActive || !focusTrap) return;
 
     const handleTabKey = (e: KeyboardEvent) => {
       const focusableElements = document.querySelectorAll(
@@ -126,7 +125,7 @@ export const useTourAccessibility = ({
 
     document.addEventListener('keydown', handleTabKey);
     return () => document.removeEventListener('keydown', handleTabKey);
-  }, [isActive, focusTrap, enableScreenReader]);
+  }, [isActive, focusTrap]);
 
   return {
     LiveRegion: () => React.createElement(LiveRegion, {

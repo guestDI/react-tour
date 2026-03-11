@@ -21,6 +21,7 @@ const __tourStyles__ = `@layer react-product-tour {
   --tour--tooltip--transition: all 0.2s ease-in-out;
 
   /* Tour Highlight */
+  --tour--highlight--padding: 8px;
   --tour--highlight--radius: 10px;
 
   /* Tour Button Colors */
@@ -28,6 +29,13 @@ const __tourStyles__ = `@layer react-product-tour {
   --tour--button--primary--text: white;
   --tour--button--secondary--background: #e5e7eb;
   --tour--button--secondary--text: #374151;
+
+  /* Tour Tooltip Size */
+  --tour--tooltip--max-width: 300px;
+
+  /* Tour Progress Bar */
+  --tour--progress--background: #e5e7eb;
+  --tour--progress--fill: #f43f5e;
 }
 
 /* Dark mode variables */
@@ -94,7 +102,7 @@ const __tourStyles__ = `@layer react-product-tour {
   padding: var(--tour--tooltip--padding);
   border-radius: var(--tour--tooltip--radius);
   box-shadow: var(--tour--tooltip--shadow);
-  max-width: 300px;
+  max-width: var(--tour--tooltip--max-width);
   z-index: 1001;
   opacity: 0;
   border: var(--tour--tooltip--border-width) solid var(--tour--tooltip--border);
@@ -189,6 +197,14 @@ const __tourStyles__ = `@layer react-product-tour {
 .tour-tooltip[data-animation="fade"].visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.tour-tooltip-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tour--tooltip--text);
+  line-height: 1.3;
 }
 
 .tour-tooltip-content {

@@ -79,13 +79,15 @@ function App() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `skip` | `boolean` | `true` | Show the Skip button |
-| `showProgress` | `boolean` | `false` | Show a progress bar |
+| `showProgress` | `boolean` | `false` | Show a progress bar and "Step X of Y" counter |
 | `animation` | `'slide' \| 'bounce' \| 'fade'` | `'slide'` | Tooltip entrance animation |
 | `overlayClassName` | `string` | — | Class applied to the overlay |
 | `tooltipClassName` | `string` | — | Class applied to the tooltip |
 | `buttonClassName` | `string` | — | Class applied to all buttons |
 | `buttonContainerClassName` | `string` | — | Class applied to the button container |
 | `highlightTarget` | `boolean \| HighlightConfig` | `true` | Highlight the target element |
+| `tooltipOffset` | `number` | `10` | Distance in pixels between the tooltip and its target |
+| `dismissOnOverlayClick` | `boolean` | `true` | Close the tour when the dark overlay is clicked |
 | `accessibility` | `AccessibilityConfig` | — | Screen reader and focus options |
 | `buttonConfig` | `ButtonConfigObj` | — | Custom button content or render functions |
 
@@ -113,6 +115,7 @@ const {
 | Property | Type | Description |
 |----------|------|-------------|
 | `selector` | `string` | CSS selector for the target element |
+| `title` | `string` | Optional heading shown at the top of the tooltip |
 | `content` | `ReactNode \| ContentType` | Content to display in the tooltip |
 | `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | Tooltip placement |
 | `waitFor` | `() => Promise<void>` | Async gate before advancing to this step |
@@ -148,9 +151,18 @@ const {
 
 ### Plain text or ReactNode
 
+Any React-renderable value works — strings, JSX elements, or full components:
+
 ```tsx
 { selector: '#el', content: 'Simple text' }
 { selector: '#el', content: <strong>Bold step</strong> }
+{ selector: '#el', content: <FeatureCallout title="New" description="Try it out" /> }
+```
+
+For explicit typing, use `type: 'custom'`:
+
+```tsx
+{ selector: '#el', content: { type: 'custom', value: <FeatureCallout /> } }
 ```
 
 ### Image
@@ -233,11 +245,18 @@ Override variables in your app's CSS to theme the tour globally:
   --tour--tooltip--gap: 0.5rem;
   --tour--tooltip--shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --tour--tooltip--transition: all 0.2s ease-in-out;
+  --tour--tooltip--max-width: 300px;
 
   --tour--button--primary--background: #646cff;
   --tour--button--primary--text: white;
   --tour--button--secondary--background: #e5e7eb;
   --tour--button--secondary--text: #374151;
+
+  --tour--highlight--padding: 8px;
+  --tour--highlight--radius: 10px;
+
+  --tour--progress--background: #e5e7eb;
+  --tour--progress--fill: #f43f5e;
 }
 ```
 
@@ -331,7 +350,24 @@ Without Tailwind, plain CSS classes work when your rules are unlayered (unlayere
 
 ---
 
+## Keyboard Navigation
+
+The tour responds to keyboard events out of the box — no configuration required:
+
+| Key | Action |
+|-----|--------|
+| `Escape` | Close / skip the tour |
+| `→` / `↓` | Advance to the next step |
+| `←` / `↑` | Go back to the previous step |
+| `Tab` / `Shift+Tab` | Move focus between buttons (focus trap when `focusTrap: true`) |
+
+Arrow keys are ignored when focus is inside an input, textarea, or select.
+
+---
+
 ## Accessibility
+
+Focus management and the Tab focus trap are active by default — they do **not** require `enableScreenReader`. Set `enableScreenReader: true` only to add aria-live screen reader announcements:
 
 ```tsx
 <Tour
@@ -342,8 +378,8 @@ Without Tailwind, plain CSS classes work when your rules are unlayered (unlayere
       end: 'Tour complete.',
       step: 'Step {step} of {total}: {content}',
     },
-    focusTrap: true,
-    focusManagement: 'auto',
+    focusTrap: true,       // default — trap Tab within the dialog
+    focusManagement: 'auto', // default — auto-focus first button; restore on close
   }}
 />
 ```
@@ -367,6 +403,28 @@ const unsubscribe = tourManager.subscribe((state) => {
   console.log(state.isActive, state.currentStep);
 });
 unsubscribe(); // cleanup
+```
+
+---
+
+## Exported Types
+
+All public types are exported for TypeScript consumers:
+
+```ts
+import type {
+  TourStep,           // A single step definition
+  TourProviderProps,  // Props for <TourProvider>
+  TourProps,          // Props for <Tour>
+  Placement,          // 'top' | 'bottom' | 'left' | 'right'
+  ContentType,        // Structured content (image/video/custom)
+  MediaSource,        // { type: 'remote'|'local', src: string }
+  HighlightConfig,    // { className?, style? } for the spotlight ring
+  AccessibilityConfig,// Screen reader and focus trap options
+  ButtonConfig,       // Per-button content/className/style/render
+  ButtonLayoutConfig, // Button container direction/align/gap/render
+  ButtonRenderProps,  // Props passed to custom button render functions
+} from 'react-product-tour-guide';
 ```
 
 ---
