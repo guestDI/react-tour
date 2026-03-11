@@ -71,6 +71,14 @@ const getMediaSource = (value: ReactNode | MediaSource): string => {
   return String(value);
 };
 
+const SAFE_IMG_ATTRS = new Set(['alt', 'width', 'height', 'loading', 'decoding', 'crossOrigin', 'referrerPolicy', 'sizes', 'srcSet', 'className', 'style']);
+const SAFE_VIDEO_ATTRS = new Set(['width', 'height', 'loop', 'muted', 'autoPlay', 'playsInline', 'preload', 'poster', 'crossOrigin', 'className', 'style']);
+
+const filterProps = (props: Record<string, unknown> | undefined, allowList: Set<string>): Record<string, unknown> => {
+  if (!props) return {};
+  return Object.fromEntries(Object.entries(props).filter(([k]) => allowList.has(k)));
+};
+
 const ImageContent: React.FC<{ src: string; alt?: string; props?: Record<string, unknown> }> = ({ src, alt = 'Tour content', props }) => {
   const [hasError, setHasError] = useState(false);
   if (hasError) return <MediaFallback type="image" className="w-full h-auto" />;
@@ -80,7 +88,7 @@ const ImageContent: React.FC<{ src: string; alt?: string; props?: Record<string,
       alt={alt}
       className="w-full h-auto rounded-lg"
       onError={() => setHasError(true)}
-      {...props}
+      {...filterProps(props, SAFE_IMG_ATTRS)}
     />
   );
 };
@@ -96,7 +104,7 @@ const VideoContent: React.FC<{ src: string; props?: Record<string, unknown> }> =
       role="presentation"
       aria-label="Tour video content"
       onError={() => setHasError(true)}
-      {...props}
+      {...filterProps(props, SAFE_VIDEO_ATTRS)}
     />
   );
 };
@@ -158,8 +166,6 @@ const renderButtons = (
     onComplete,
     isFirstStep,
     isLastStep,
-    currentStep,
-    totalSteps,
     skip,
   } = props;
 

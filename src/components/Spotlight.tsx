@@ -175,10 +175,10 @@ export const Spotlight: React.FC<SpotlightComponentProps> = memo(({
       )}
 
       {/* Add isolation to the target element */}
-      {isPartialBlur && (
+      {isPartialBlur && targetElement.id && (
         <style>
           {`
-            #${targetElement.id} {
+            #${CSS.escape(targetElement.id)} {
               isolation: isolate;
               position: relative;
               z-index: 50;
