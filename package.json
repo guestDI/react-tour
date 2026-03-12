@@ -1,6 +1,6 @@
 {
   "name": "react-product-tour-guide",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "type": "module",
   "description": "A flexible and accessible product tour component for React applications",
   "main": "dist/index.js",
@@ -93,12 +93,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/guestDI/react-tour-guide.git"
+    "url": "https://github.com/guestDI/react-tour.git"
   },
   "bugs": {
-    "url": "https://github.com/guestDI/react-tour-guide/issues"
+    "url": "https://github.com/guestDI/react-tour/issues"
   },
-  "homepage": "https://github.com/guestDI/react-tour-guide#readme",
+  "homepage": "https://github.com/guestDI/react-tour#readme",
   "engines": {
     "node": ">=18.0.0"
   },
