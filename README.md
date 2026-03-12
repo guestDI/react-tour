@@ -26,18 +26,18 @@ Styles are loaded automatically — no separate CSS import needed.
 ## Quick Start
 
 ```tsx
-import { TourProvider, Tour, useTour } from 'react-product-tour-guide';
+import { TourProvider, Tour, useTour } from "react-product-tour-guide";
 
 const steps = [
   {
-    selector: '#welcome',
-    content: 'Welcome to our app!',
-    placement: 'bottom',
+    selector: "#welcome",
+    content: "Welcome to our app!",
+    placement: "bottom",
   },
   {
-    selector: '#features',
-    content: 'Check out our amazing features!',
-    placement: 'right',
+    selector: "#features",
+    content: "Check out our amazing features!",
+    placement: "right",
   },
 ];
 
@@ -48,7 +48,7 @@ function TourButton() {
 
 function App() {
   return (
-    <TourProvider steps={steps} onComplete={() => console.log('Tour done!')}>
+    <TourProvider steps={steps} onComplete={() => console.log("Tour done!")}>
       <TourButton />
       <Tour />
       {/* rest of your app */}
@@ -63,33 +63,33 @@ function App() {
 
 ### `TourProvider` Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `steps` | `TourStep[]` | required | Array of tour steps |
-| `children` | `ReactNode` | required | Child components |
-| `defaultActive` | `boolean` | `false` | Start tour automatically on mount |
-| `onComplete` | `() => void` | — | Called when the last step is completed |
-| `onSkip` | `() => void` | — | Called when the tour is skipped |
-| `onStepChange` | `(index, step) => void` | — | Called after navigating to a new step |
-| `onStepEnter` | `(index, step) => void` | — | Called when entering a step |
-| `onStepExit` | `(index, step) => void` | — | Called when leaving a step |
+| Prop            | Type                    | Default  | Description                            |
+| --------------- | ----------------------- | -------- | -------------------------------------- |
+| `steps`         | `TourStep[]`            | required | Array of tour steps                    |
+| `children`      | `ReactNode`             | required | Child components                       |
+| `defaultActive` | `boolean`               | `false`  | Start tour automatically on mount      |
+| `onComplete`    | `() => void`            | —        | Called when the last step is completed |
+| `onSkip`        | `() => void`            | —        | Called when the tour is skipped        |
+| `onStepChange`  | `(index, step) => void` | —        | Called after navigating to a new step  |
+| `onStepEnter`   | `(index, step) => void` | —        | Called when entering a step            |
+| `onStepExit`    | `(index, step) => void` | —        | Called when leaving a step             |
 
 ### `Tour` Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `skip` | `boolean` | `true` | Show the Skip button |
-| `showProgress` | `boolean` | `false` | Show a progress bar and "Step X of Y" counter |
-| `animation` | `'slide' \| 'bounce' \| 'fade'` | `'slide'` | Tooltip entrance animation |
-| `overlayClassName` | `string` | — | Class applied to the overlay |
-| `tooltipClassName` | `string` | — | Class applied to the tooltip |
-| `buttonClassName` | `string` | — | Class applied to all buttons |
-| `buttonContainerClassName` | `string` | — | Class applied to the button container |
-| `highlightTarget` | `boolean \| HighlightConfig` | `true` | Highlight the target element |
-| `tooltipOffset` | `number` | `10` | Distance in pixels between the tooltip and its target |
-| `dismissOnOverlayClick` | `boolean` | `true` | Close the tour when the dark overlay is clicked |
-| `accessibility` | `AccessibilityConfig` | — | Screen reader and focus options |
-| `buttonConfig` | `ButtonConfigObj` | — | Custom button content or render functions |
+| Prop                       | Type                            | Default   | Description                                           |
+| -------------------------- | ------------------------------- | --------- | ----------------------------------------------------- |
+| `skip`                     | `boolean`                       | `true`    | Show the Skip button                                  |
+| `showProgress`             | `boolean`                       | `false`   | Show a progress bar and "Step X of Y" counter         |
+| `animation`                | `'slide' \| 'bounce' \| 'fade'` | `'slide'` | Tooltip entrance animation                            |
+| `overlayClassName`         | `string`                        | —         | Class applied to the overlay                          |
+| `tooltipClassName`         | `string`                        | —         | Class applied to the tooltip                          |
+| `buttonClassName`          | `string`                        | —         | Class applied to all buttons                          |
+| `buttonContainerClassName` | `string`                        | —         | Class applied to the button container                 |
+| `highlightTarget`          | `boolean \| HighlightConfig`    | `true`    | Highlight the target element                          |
+| `tooltipOffset`            | `number`                        | `10`      | Distance in pixels between the tooltip and its target |
+| `dismissOnOverlayClick`    | `boolean`                       | `true`    | Close the tour when the dark overlay is clicked       |
+| `accessibility`            | `AccessibilityConfig`           | —         | Screen reader and focus options                       |
+| `buttonConfig`             | `ButtonConfigObj`               | —         | Custom button content or render functions             |
 
 ### `useTour`
 
@@ -97,14 +97,14 @@ Returns the tour context:
 
 ```ts
 const {
-  steps,        // TourStep[]
-  currentStep,  // number
-  isActive,     // boolean
-  start,        // () => void
-  stop,         // () => void
-  next,         // () => Promise<void>  — awaits step.waitFor if present
-  back,         // () => void
-  skip,         // () => void
+  steps, // TourStep[]
+  currentStep, // number
+  isActive, // boolean
+  start, // () => void
+  stop, // () => void
+  next, // () => Promise<void>  — awaits step.waitFor if present
+  back, // () => void
+  skip, // () => void
 } = useTour();
 ```
 
@@ -112,38 +112,38 @@ const {
 
 ### `TourStep`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `selector` | `string` | CSS selector for the target element |
-| `title` | `string` | Optional heading shown at the top of the tooltip |
-| `content` | `ReactNode \| ContentType` | Content to display in the tooltip |
-| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | Tooltip placement |
-| `waitFor` | `() => Promise<void>` | Async gate before advancing to this step |
+| Property    | Type                                     | Description                                      |
+| ----------- | ---------------------------------------- | ------------------------------------------------ |
+| `selector`  | `string`                                 | CSS selector for the target element              |
+| `title`     | `string`                                 | Optional heading shown at the top of the tooltip |
+| `content`   | `ReactNode \| ContentType`               | Content to display in the tooltip                |
+| `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | Tooltip placement                                |
+| `waitFor`   | `() => Promise<void>`                    | Async gate before advancing to this step         |
 
 ### `ContentType`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `type` | `'text' \| 'image' \| 'video' \| 'custom'` | Content type |
-| `value` | `ReactNode \| string \| MediaSource` | Content value |
-| `alt` | `string` | Alt text for image content (default: `'Tour content'`) |
-| `props` | `Record<string, unknown>` | Extra props forwarded to the element |
+| Property | Type                                       | Description                                            |
+| -------- | ------------------------------------------ | ------------------------------------------------------ |
+| `type`   | `'text' \| 'image' \| 'video' \| 'custom'` | Content type                                           |
+| `value`  | `ReactNode \| string \| MediaSource`       | Content value                                          |
+| `alt`    | `string`                                   | Alt text for image content (default: `'Tour content'`) |
+| `props`  | `Record<string, unknown>`                  | Extra props forwarded to the element                   |
 
 ### `MediaSource`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `type` | `'remote' \| 'local'` | Media source type |
-| `src` | `string` | URL or asset path |
+| Property | Type                  | Description       |
+| -------- | --------------------- | ----------------- |
+| `type`   | `'remote' \| 'local'` | Media source type |
+| `src`    | `string`              | URL or asset path |
 
 ### `AccessibilityConfig`
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `enableScreenReader` | `boolean` | Enable aria-live announcements |
-| `announcements` | `{ start, end, step }` | Custom announcement strings |
-| `focusManagement` | `'auto' \| 'manual'` | Focus strategy |
-| `focusTrap` | `boolean` | Trap Tab key within the tour dialog |
+| Property             | Type                   | Description                         |
+| -------------------- | ---------------------- | ----------------------------------- |
+| `enableScreenReader` | `boolean`              | Enable aria-live announcements      |
+| `announcements`      | `{ start, end, step }` | Custom announcement strings         |
+| `focusManagement`    | `'auto' \| 'manual'`   | Focus strategy                      |
+| `focusTrap`          | `boolean`              | Trap Tab key within the tour dialog |
 
 ---
 
@@ -287,7 +287,11 @@ Pass any CSS class names via the className props. When using **Tailwind**, prefi
 Without Tailwind, plain CSS classes work when your rules are unlayered (unlayered styles always win over the library's `@layer react-product-tour` styles):
 
 ```css
-.my-tooltip { background: #1e293b; color: #f1f5f9; border-radius: 1rem; }
+.my-tooltip {
+  background: #1e293b;
+  color: #f1f5f9;
+  border-radius: 1rem;
+}
 ```
 
 ```tsx
@@ -300,17 +304,17 @@ Without Tailwind, plain CSS classes work when your rules are unlayered (unlayere
 <Tour
   buttonConfig={{
     primary: {
-      content: 'Continue →',
-      className: 'bg-indigo-500 text-white px-6 py-2 rounded-lg',
+      content: "Continue →",
+      className: "bg-indigo-500 text-white px-6 py-2 rounded-lg",
     },
     secondary: {
-      content: '← Back',
+      content: "← Back",
     },
     // Or full custom render:
     primary: {
       render: ({ onNext, onComplete, isLastStep, currentStep, totalSteps }) => (
         <button onClick={isLastStep ? onComplete : onNext}>
-          {isLastStep ? 'Finish' : `Next (${currentStep + 1}/${totalSteps})`}
+          {isLastStep ? "Finish" : `Next (${currentStep + 1}/${totalSteps})`}
         </button>
       ),
     },
@@ -319,11 +323,9 @@ Without Tailwind, plain CSS classes work when your rules are unlayered (unlayere
       render: (props) => (
         <div className="flex flex-col gap-3 mt-4 pt-4 border-t">
           <button onClick={props.isLastStep ? props.onComplete : props.onNext}>
-            {props.isLastStep ? 'Done' : 'Next'}
+            {props.isLastStep ? "Done" : "Next"}
           </button>
-          {!props.isFirstStep && (
-            <button onClick={props.onBack}>Back</button>
-          )}
+          {!props.isFirstStep && <button onClick={props.onBack}>Back</button>}
         </div>
       ),
     },
@@ -338,11 +340,11 @@ Without Tailwind, plain CSS classes work when your rules are unlayered (unlayere
 ```tsx
 <TourProvider
   steps={steps}
-  onStepChange={(index, step) => analytics.track('tour_step', { index })}
-  onStepEnter={(index, step) => console.log('entered', step.selector)}
-  onStepExit={(index, step) => console.log('exited', step.selector)}
-  onComplete={() => localStorage.setItem('tour_done', '1')}
-  onSkip={() => console.log('skipped')}
+  onStepChange={(index, step) => analytics.track("tour_step", { index })}
+  onStepEnter={(index, step) => console.log("entered", step.selector)}
+  onStepExit={(index, step) => console.log("exited", step.selector)}
+  onComplete={() => localStorage.setItem("tour_done", "1")}
+  onSkip={() => console.log("skipped")}
 >
   <Tour />
 </TourProvider>
@@ -354,11 +356,11 @@ Without Tailwind, plain CSS classes work when your rules are unlayered (unlayere
 
 The tour responds to keyboard events out of the box — no configuration required:
 
-| Key | Action |
-|-----|--------|
-| `Escape` | Close / skip the tour |
-| `→` / `↓` | Advance to the next step |
-| `←` / `↑` | Go back to the previous step |
+| Key                 | Action                                                         |
+| ------------------- | -------------------------------------------------------------- |
+| `Escape`            | Close / skip the tour                                          |
+| `→` / `↓`           | Advance to the next step                                       |
+| `←` / `↑`           | Go back to the previous step                                   |
 | `Tab` / `Shift+Tab` | Move focus between buttons (focus trap when `focusTrap: true`) |
 
 Arrow keys are ignored when focus is inside an input, textarea, or select.
@@ -374,12 +376,12 @@ Focus management and the Tab focus trap are active by default — they do **not*
   accessibility={{
     enableScreenReader: true,
     announcements: {
-      start: 'Product tour started. Press Tab to navigate.',
-      end: 'Tour complete.',
-      step: 'Step {step} of {total}: {content}',
+      start: "Product tour started. Press Tab to navigate.",
+      end: "Tour complete.",
+      step: "Step {step} of {total}: {content}",
     },
-    focusTrap: true,       // default — trap Tab within the dialog
-    focusManagement: 'auto', // default — auto-focus first button; restore on close
+    focusTrap: true, // default — trap Tab within the dialog
+    focusManagement: "auto", // default — auto-focus first button; restore on close
   }}
 />
 ```
@@ -391,7 +393,7 @@ Focus management and the Tab focus trap are active by default — they do **not*
 For use cases where `TourProvider` can't wrap your component tree:
 
 ```tsx
-import { tourManager } from 'react-product-tour-guide';
+import { tourManager } from "react-product-tour-guide";
 
 tourManager.initialize(steps);
 tourManager.start();
@@ -413,18 +415,18 @@ All public types are exported for TypeScript consumers:
 
 ```ts
 import type {
-  TourStep,           // A single step definition
-  TourProviderProps,  // Props for <TourProvider>
-  TourProps,          // Props for <Tour>
-  Placement,          // 'top' | 'bottom' | 'left' | 'right'
-  ContentType,        // Structured content (image/video/custom)
-  MediaSource,        // { type: 'remote'|'local', src: string }
-  HighlightConfig,    // { className?, style? } for the spotlight ring
-  AccessibilityConfig,// Screen reader and focus trap options
-  ButtonConfig,       // Per-button content/className/style/render
+  TourStep, // A single step definition
+  TourProviderProps, // Props for <TourProvider>
+  TourProps, // Props for <Tour>
+  Placement, // 'top' | 'bottom' | 'left' | 'right'
+  ContentType, // Structured content (image/video/custom)
+  MediaSource, // { type: 'remote'|'local', src: string }
+  HighlightConfig, // { className?, style? } for the spotlight ring
+  AccessibilityConfig, // Screen reader and focus trap options
+  ButtonConfig, // Per-button content/className/style/render
   ButtonLayoutConfig, // Button container direction/align/gap/render
-  ButtonRenderProps,  // Props passed to custom button render functions
-} from 'react-product-tour-guide';
+  ButtonRenderProps, // Props passed to custom button render functions
+} from "react-product-tour-guide";
 ```
 
 ---
@@ -452,3 +454,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, coding standards,
 ## License
 
 MIT — see [LICENSE](LICENSE) for details.
+
+## Support
+
+Buy me a coffee: buymeacoffee.com/guestdm

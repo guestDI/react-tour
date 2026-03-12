@@ -1,6 +1,6 @@
 {
   "name": "react-product-tour-guide",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "description": "A flexible and accessible product tour component for React applications",
   "main": "dist/index.js",
