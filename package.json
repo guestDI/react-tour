@@ -1,6 +1,6 @@
 {
   "name": "react-product-tour-guide",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "type": "module",
   "description": "A flexible and accessible product tour component for React applications",
   "main": "dist/index.js",
@@ -26,8 +26,8 @@
     "clean": "rimraf dist"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.4",
@@ -46,10 +46,11 @@
     "@storybook/test": "^8.6.14",
     "@storybook/testing-library": "^0.2.1",
     "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^14.2.1",
+    "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.25.0",
@@ -58,8 +59,8 @@
     "globals": "^16.0.0",
     "jsdom": "^24.0.0",
     "postcss": "^8.5.3",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "rimraf": "^5.0.5",
     "storybook": "^8.6.14",
     "tailwindcss": "^3.4.17",
@@ -105,7 +106,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "sideEffects": ["./src/styles/inject.ts", "**/*.css"],
+  "sideEffects": [
+    "./src/styles/inject.ts",
+    "./dist/index.js",
+    "./dist/index.mjs",
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

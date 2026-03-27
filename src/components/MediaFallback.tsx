@@ -7,12 +7,12 @@ interface MediaFallbackProps {
 
 export const MediaFallback: React.FC<MediaFallbackProps> = ({ type, className = '' }) => {
   return (
-    <div className={`flex items-center justify-center p-4 bg-gray-100 rounded-lg ${className}`}>
-      <div className="text-center">
-        <div className="text-gray-400 mb-2">
+    <div className={className} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', background: '#f3f4f6', borderRadius: '0.5rem' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ color: '#9ca3af', marginBottom: '0.5rem' }}>
           {type === 'image' ? '🖼️' : '🎥'}
         </div>
-        <p className="text-sm text-gray-500">
+        <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
           {type === 'image' ? 'Image failed to load' : 'Video failed to load'}
         </p>
       </div>

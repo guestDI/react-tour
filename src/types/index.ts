@@ -159,7 +159,10 @@ export interface TourProps {
   /** Custom button configuration */
   buttonConfig?: {
     primary?: ButtonConfig;
+    /** @deprecated Use `back` and `skip` instead. Applies to both back and skip buttons when the specific key is absent. */
     secondary?: ButtonConfig;
+    back?: ButtonConfig;
+    skip?: ButtonConfig;
     container?: ButtonLayoutConfig;
   };
   /** Accessibility configuration */

@@ -52,7 +52,10 @@ interface TourTooltipProps {
   /** Button configuration */
   buttonConfig?: {
     primary?: ButtonConfig;
+    /** @deprecated Use `back` and `skip` instead. Applies to both back and skip buttons when the specific key is absent. */
     secondary?: ButtonConfig;
+    back?: ButtonConfig;
+    skip?: ButtonConfig;
     container?: ButtonLayoutConfig;
   };
 }
@@ -81,12 +84,12 @@ const filterProps = (props: Record<string, unknown> | undefined, allowList: Set<
 
 const ImageContent: React.FC<{ src: string; alt?: string; props?: Record<string, unknown> }> = ({ src, alt = 'Tour content', props }) => {
   const [hasError, setHasError] = useState(false);
-  if (hasError) return <MediaFallback type="image" className="w-full h-auto" />;
+  if (hasError) return <MediaFallback type="image" />;
   return (
     <img
       src={src}
       alt={alt}
-      className="w-full h-auto rounded-lg"
+      style={{ width: '100%', height: 'auto', borderRadius: '0.5rem' }}
       onError={() => setHasError(true)}
       {...filterProps(props, SAFE_IMG_ATTRS)}
     />
@@ -95,7 +98,7 @@ const ImageContent: React.FC<{ src: string; alt?: string; props?: Record<string,
 
 const VideoContent: React.FC<{ src: string; props?: Record<string, unknown> }> = ({ src, props }) => {
   const [hasError, setHasError] = useState(false);
-  if (hasError) return <MediaFallback type="video" className="w-full h-auto" />;
+  if (hasError) return <MediaFallback type="video" />;
   return (
     <video
       src={src}
@@ -156,6 +159,8 @@ const renderButtons = (
   config?: {
     primary?: ButtonConfig;
     secondary?: ButtonConfig;
+    back?: ButtonConfig;
+    skip?: ButtonConfig;
     container?: ButtonLayoutConfig;
   }
 ): React.ReactNode => {
@@ -169,6 +174,9 @@ const renderButtons = (
     skip,
   } = props;
 
+  const backCfg = config?.back ?? config?.secondary;
+  const skipCfg = config?.skip ?? config?.secondary;
+
   // If container has a custom render function, use it
   if (config?.container?.render) {
     return config.container.render(props);
@@ -177,10 +185,7 @@ const renderButtons = (
   // Default button container
   return (
     <div
-      className={clsx(
-        'flex justify-between items-center gap-2',
-        config?.container?.className
-      )}
+      className={clsx('tour-button-nav', config?.container?.className)}
       style={{
         flexDirection: config?.container?.direction || 'row',
         alignItems: config?.container?.align || 'center',
@@ -190,32 +195,32 @@ const renderButtons = (
       role="toolbar"
       aria-label="Tour navigation"
     >
-      <div className="flex gap-2">
+      <div className="tour-button-group">
         {!isFirstStep && (
-          config?.secondary?.render ? (
-            config.secondary.render(props)
+          backCfg?.render ? (
+            backCfg.render(props)
           ) : (
             <button
               onClick={onBack}
-              className={clsx('tour-button tour-button-secondary', config?.secondary?.className)}
-              style={config?.secondary?.style}
+              className={clsx('tour-button tour-button-secondary', backCfg?.className)}
+              style={backCfg?.style}
               aria-label="Go to previous step"
             >
-              {config?.secondary?.content || 'Back'}
+              {backCfg?.content || 'Back'}
             </button>
           )
         )}
         {skip && (
-          config?.secondary?.render ? (
-            config.secondary.render(props)
+          skipCfg?.render ? (
+            skipCfg.render(props)
           ) : (
             <button
               onClick={onSkip}
-              className={clsx('tour-button tour-button-secondary', config?.secondary?.className)}
-              style={config?.secondary?.style}
+              className={clsx('tour-button tour-button-secondary', skipCfg?.className)}
+              style={skipCfg?.style}
               aria-label="Skip tour"
             >
-              {config?.secondary?.content || 'Skip'}
+              {skipCfg?.content || 'Skip'}
             </button>
           )
         )}
@@ -282,7 +287,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
     <div
       ref={setFloating}
       style={floatingStyles}
-      className={clsx('tour-tooltip z-50', tooltipClassName, { visible: isVisible })}
+      className={clsx('tour-tooltip', tooltipClassName, { visible: isVisible })}
       role="dialog"
       aria-modal="true"
       aria-labelledby="tour-step-title"
@@ -300,21 +305,21 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
         </div>
       )}
       {showProgress && currentStep !== undefined && totalSteps !== undefined && (
-        <div className="mb-4">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs" style={{ opacity: 0.6 }} aria-hidden="true">
+        <div className="tour-progress-section">
+          <div className="tour-progress-header">
+            <span className="tour-step-counter" aria-hidden="true">
               {`Step ${currentStep + 1} of ${totalSteps}`}
             </span>
           </div>
           <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
         </div>
       )}
-      <div id="tour-step-content" className="mb-4">
+      <div id="tour-step-content" className="tour-tooltip-content">
         <ErrorBoundary
           fallback={
-            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
-              <div className="text-gray-600 mb-2">Content Error</div>
-              <div className="text-sm text-gray-500">
+            <div style={{ padding: '1rem', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '0.5rem' }}>
+              <div style={{ color: '#4b5563', marginBottom: '0.5rem' }}>Content Error</div>
+              <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>
                 Failed to render tour content
               </div>
             </div>

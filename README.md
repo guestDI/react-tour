@@ -14,6 +14,8 @@ A flexible and accessible product tour component for React applications.
 - Customizable styling via CSS variables, class names, or fully custom button renders
 - Error boundaries for graceful media failure degradation
 - Debounced scroll/resize handling for smooth repositioning
+- Works without Tailwind CSS — base styles are injected automatically; Tailwind classes still accepted for customisation
+- React 18 and React 19 compatible
 
 ## Installation
 
@@ -300,6 +302,8 @@ Without Tailwind, plain CSS classes work when your rules are unlayered (unlayere
 
 ### Custom Button Rendering
 
+Use `back` and `skip` to configure each secondary button independently. `secondary` is still accepted as a fallback for both when neither specific key is set.
+
 ```tsx
 <Tour
   buttonConfig={{
@@ -307,21 +311,24 @@ Without Tailwind, plain CSS classes work when your rules are unlayered (unlayere
       content: "Continue →",
       className: "bg-indigo-500 text-white px-6 py-2 rounded-lg",
     },
-    secondary: {
+    back: {
       content: "← Back",
     },
-    // Or full custom render:
-    primary: {
-      render: ({ onNext, onComplete, isLastStep, currentStep, totalSteps }) => (
-        <button onClick={isLastStep ? onComplete : onNext}>
-          {isLastStep ? "Finish" : `Next (${currentStep + 1}/${totalSteps})`}
-        </button>
-      ),
+    skip: {
+      content: "Skip tour",
     },
+    // Or a full custom render per button:
+    // primary: {
+    //   render: ({ onNext, onComplete, isLastStep, currentStep, totalSteps }) => (
+    //     <button onClick={isLastStep ? onComplete : onNext}>
+    //       {isLastStep ? "Finish" : `Next (${currentStep + 1}/${totalSteps})`}
+    //     </button>
+    //   ),
+    // },
     // Custom container layout:
     container: {
       render: (props) => (
-        <div className="flex flex-col gap-3 mt-4 pt-4 border-t">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <button onClick={props.isLastStep ? props.onComplete : props.onNext}>
             {props.isLastStep ? "Done" : "Next"}
           </button>

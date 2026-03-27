@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { TourProvider, useTour } from '../../context/TourContext';
 import { Tour } from '../Tour';
 import userEvent from '@testing-library/user-event';

@@ -85,7 +85,7 @@ exports[`Spotlight snapshots > first step 1`] = `
     aria-describedby="tour-step-content"
     aria-labelledby="tour-step-title"
     aria-modal="true"
-    class="tour-tooltip z-50"
+    class="tour-tooltip"
     data-animation="slide"
     data-placement="bottom"
     role="dialog"
@@ -98,19 +98,19 @@ exports[`Spotlight snapshots > first step 1`] = `
       Tour Step: target element
     </div>
     <div
-      class="mb-4"
+      class="tour-tooltip-content"
       id="tour-step-content"
     >
       Spotlight content
     </div>
     <div
       aria-label="Tour navigation"
-      class="flex justify-between items-center gap-2"
+      class="tour-button-nav"
       role="toolbar"
       style="flex-direction: row; align-items: center; gap: 0.5rem;"
     >
       <div
-        class="flex gap-2"
+        class="tour-button-group"
       >
         <button
           aria-label="Skip tour"
@@ -151,7 +151,7 @@ exports[`Spotlight snapshots > last step 1`] = `
     aria-describedby="tour-step-content"
     aria-labelledby="tour-step-title"
     aria-modal="true"
-    class="tour-tooltip z-50"
+    class="tour-tooltip"
     data-animation="slide"
     data-placement="bottom"
     role="dialog"
@@ -164,19 +164,19 @@ exports[`Spotlight snapshots > last step 1`] = `
       Tour Step: target element
     </div>
     <div
-      class="mb-4"
+      class="tour-tooltip-content"
       id="tour-step-content"
     >
       Spotlight content
     </div>
     <div
       aria-label="Tour navigation"
-      class="flex justify-between items-center gap-2"
+      class="tour-button-nav"
       role="toolbar"
       style="flex-direction: row; align-items: center; gap: 0.5rem;"
     >
       <div
-        class="flex gap-2"
+        class="tour-button-group"
       >
         <button
           aria-label="Go to previous step"
@@ -223,7 +223,7 @@ exports[`Spotlight snapshots > mid-tour default 1`] = `
     aria-describedby="tour-step-content"
     aria-labelledby="tour-step-title"
     aria-modal="true"
-    class="tour-tooltip z-50"
+    class="tour-tooltip"
     data-animation="slide"
     data-placement="bottom"
     role="dialog"
@@ -236,19 +236,19 @@ exports[`Spotlight snapshots > mid-tour default 1`] = `
       Tour Step: target element
     </div>
     <div
-      class="mb-4"
+      class="tour-tooltip-content"
       id="tour-step-content"
     >
       Spotlight content
     </div>
     <div
       aria-label="Tour navigation"
-      class="flex justify-between items-center gap-2"
+      class="tour-button-nav"
       role="toolbar"
       style="flex-direction: row; align-items: center; gap: 0.5rem;"
     >
       <div
-        class="flex gap-2"
+        class="tour-button-group"
       >
         <button
           aria-label="Go to previous step"
@@ -295,7 +295,7 @@ exports[`Spotlight snapshots > skip hidden 1`] = `
     aria-describedby="tour-step-content"
     aria-labelledby="tour-step-title"
     aria-modal="true"
-    class="tour-tooltip z-50"
+    class="tour-tooltip"
     data-animation="slide"
     data-placement="bottom"
     role="dialog"
@@ -308,19 +308,19 @@ exports[`Spotlight snapshots > skip hidden 1`] = `
       Tour Step: target element
     </div>
     <div
-      class="mb-4"
+      class="tour-tooltip-content"
       id="tour-step-content"
     >
       Spotlight content
     </div>
     <div
       aria-label="Tour navigation"
-      class="flex justify-between items-center gap-2"
+      class="tour-button-nav"
       role="toolbar"
       style="flex-direction: row; align-items: center; gap: 0.5rem;"
     >
       <div
-        class="flex gap-2"
+        class="tour-button-group"
       >
         <button
           aria-label="Go to previous step"
@@ -361,7 +361,7 @@ exports[`Spotlight snapshots > with custom classes 1`] = `
     aria-describedby="tour-step-content"
     aria-labelledby="tour-step-title"
     aria-modal="true"
-    class="tour-tooltip z-50 bg-violet-800 text-white"
+    class="tour-tooltip bg-violet-800 text-white"
     data-animation="slide"
     data-placement="bottom"
     role="dialog"
@@ -374,19 +374,19 @@ exports[`Spotlight snapshots > with custom classes 1`] = `
       Tour Step: target element
     </div>
     <div
-      class="mb-4"
+      class="tour-tooltip-content"
       id="tour-step-content"
     >
       Spotlight content
     </div>
     <div
       aria-label="Tour navigation"
-      class="flex justify-between items-center gap-2"
+      class="tour-button-nav"
       role="toolbar"
       style="flex-direction: row; align-items: center; gap: 0.5rem;"
     >
       <div
-        class="flex gap-2"
+        class="tour-button-group"
       >
         <button
           aria-label="Go to previous step"
@@ -433,7 +433,7 @@ exports[`Spotlight snapshots > with progress bar 1`] = `
     aria-describedby="tour-step-content"
     aria-labelledby="tour-step-title"
     aria-modal="true"
-    class="tour-tooltip z-50"
+    class="tour-tooltip"
     data-animation="slide"
     data-placement="bottom"
     role="dialog"
@@ -446,15 +446,14 @@ exports[`Spotlight snapshots > with progress bar 1`] = `
       Tour Step: target element
     </div>
     <div
-      class="mb-4"
+      class="tour-progress-section"
     >
       <div
-        class="flex justify-between items-center mb-1"
+        class="tour-progress-header"
       >
         <span
           aria-hidden="true"
-          class="text-xs"
-          style="opacity: 0.6;"
+          class="tour-step-counter"
         >
           Step 2 of 4
         </span>
@@ -474,19 +473,19 @@ exports[`Spotlight snapshots > with progress bar 1`] = `
       </div>
     </div>
     <div
-      class="mb-4"
+      class="tour-tooltip-content"
       id="tour-step-content"
     >
       Spotlight content
     </div>
     <div
       aria-label="Tour navigation"
-      class="flex justify-between items-center gap-2"
+      class="tour-button-nav"
       role="toolbar"
       style="flex-direction: row; align-items: center; gap: 0.5rem;"
     >
       <div
-        class="flex gap-2"
+        class="tour-button-group"
       >
         <button
           aria-label="Go to previous step"
@@ -542,7 +541,7 @@ exports[`TourTooltip snapshots > custom content type 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -555,7 +554,7 @@ exports[`TourTooltip snapshots > custom content type 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     <div
@@ -566,12 +565,12 @@ exports[`TourTooltip snapshots > custom content type 1`] = `
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -601,7 +600,7 @@ exports[`TourTooltip snapshots > first step — no Back button 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -614,19 +613,19 @@ exports[`TourTooltip snapshots > first step — no Back button 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     Step one
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Skip tour"
@@ -650,7 +649,7 @@ exports[`TourTooltip snapshots > image content type 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -663,23 +662,23 @@ exports[`TourTooltip snapshots > image content type 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     <img
       alt="Tour content"
-      class="w-full h-auto rounded-lg"
       src="https://example.com/hero.png"
+      style="width: 100%; height: auto; border-radius: 0.5rem;"
     />
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -709,7 +708,7 @@ exports[`TourTooltip snapshots > last step — Done button 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -722,19 +721,19 @@ exports[`TourTooltip snapshots > last step — Done button 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     Final step
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -764,7 +763,7 @@ exports[`TourTooltip snapshots > skip hidden 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -777,19 +776,19 @@ exports[`TourTooltip snapshots > skip hidden 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     No skip
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -813,7 +812,7 @@ exports[`TourTooltip snapshots > text content — mid-tour 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -826,19 +825,19 @@ exports[`TourTooltip snapshots > text content — mid-tour 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     Welcome to the feature!
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -868,7 +867,7 @@ exports[`TourTooltip snapshots > with bounce animation data attribute 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="bounce"
   data-placement="bottom"
   role="dialog"
@@ -881,19 +880,19 @@ exports[`TourTooltip snapshots > with bounce animation data attribute 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     Bounce
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -923,7 +922,7 @@ exports[`TourTooltip snapshots > with custom primary button content 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -936,19 +935,19 @@ exports[`TourTooltip snapshots > with custom primary button content 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     Custom button
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -978,7 +977,7 @@ exports[`TourTooltip snapshots > with custom tooltip class 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50 bg-rose-900 text-white rounded-2xl"
+  class="tour-tooltip bg-rose-900 text-white rounded-2xl"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -991,19 +990,19 @@ exports[`TourTooltip snapshots > with custom tooltip class 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     Styled
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -1033,7 +1032,7 @@ exports[`TourTooltip snapshots > with fade animation data attribute 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="fade"
   data-placement="bottom"
   role="dialog"
@@ -1046,19 +1045,19 @@ exports[`TourTooltip snapshots > with fade animation data attribute 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     Fade
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"
@@ -1088,7 +1087,7 @@ exports[`TourTooltip snapshots > with progress bar 1`] = `
   aria-describedby="tour-step-content"
   aria-labelledby="tour-step-title"
   aria-modal="true"
-  class="tour-tooltip z-50"
+  class="tour-tooltip"
   data-animation="slide"
   data-placement="bottom"
   role="dialog"
@@ -1101,15 +1100,14 @@ exports[`TourTooltip snapshots > with progress bar 1`] = `
     Tour Step: Feature button
   </div>
   <div
-    class="mb-4"
+    class="tour-progress-section"
   >
     <div
-      class="flex justify-between items-center mb-1"
+      class="tour-progress-header"
     >
       <span
         aria-hidden="true"
-        class="text-xs"
-        style="opacity: 0.6;"
+        class="tour-step-counter"
       >
         Step 2 of 4
       </span>
@@ -1129,19 +1127,19 @@ exports[`TourTooltip snapshots > with progress bar 1`] = `
     </div>
   </div>
   <div
-    class="mb-4"
+    class="tour-tooltip-content"
     id="tour-step-content"
   >
     Step 2
   </div>
   <div
     aria-label="Tour navigation"
-    class="flex justify-between items-center gap-2"
+    class="tour-button-nav"
     role="toolbar"
     style="flex-direction: row; align-items: center; gap: 0.5rem;"
   >
     <div
-      class="flex gap-2"
+      class="tour-button-group"
     >
       <button
         aria-label="Go to previous step"

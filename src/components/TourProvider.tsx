@@ -1,5 +1,5 @@
-import React, { createContext, useContext, type ReactNode } from 'react';
-import type { TourStep, TourContextValue, TourProviderProps } from '../types';
+import React, { createContext, useContext } from 'react';
+import type { TourContextValue, TourProviderProps } from '../types';
 
 /**
  * Context for managing tour state and navigation
@@ -33,9 +33,6 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   onStepChange,
   onStepEnter,
   onStepExit,
-  showProgress = false,
-  isRTL = false,
-  accessibility,
 }) => {
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isActive, setIsActive] = React.useState(defaultActive);

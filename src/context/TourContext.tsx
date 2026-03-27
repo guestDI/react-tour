@@ -2,9 +2,9 @@ import React, { createContext, useContext, useState, useCallback, useEffect, use
 import type { TourContextValue, TourProviderProps } from '../types';
 import { tourManager } from '../manager/TourManager';
 
-export const TourContext = createContext<TourContextValue | null>(null);
+const TourContext = createContext<TourContextValue | null>(null);
 
-export const TourProvider: React.FC<TourProviderProps> = ({
+const TourProvider: React.FC<TourProviderProps> = ({
   steps,
   children,
   defaultActive = false,
@@ -88,10 +88,16 @@ export const TourProvider: React.FC<TourProviderProps> = ({
   );
 };
 
-export const useTour = () => {
+const useTour = () => {
   const context = useContext(TourContext);
   if (!context) {
     throw new Error('useTour must be used within a TourProvider');
   }
   return context;
 }; 
+
+export {
+  TourContext,
+  TourProvider, 
+  useTour
+}
