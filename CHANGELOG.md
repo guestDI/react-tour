@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-04-04
+
+### Fixed
+
+- **Progress bar Tailwind dependency removed.** `ProgressBar` was using Tailwind utility classes (`w-full h-1 rounded-full`, `h-full rounded-full transition-all duration-300`) that required the consumer app to have Tailwind configured. Replaced with inline styles.
+- **`placement` prop typed as `string` in `TourTooltip`** — now correctly typed as the strict `Placement` union (`'top' | 'bottom' | 'left' | 'right'`).
+- **Step counter hidden from screen readers.** The "Step N of N" text had `aria-hidden="true"`, making it invisible to assistive technology. Removed the attribute so screen readers announce the current step.
+- **Emoji icons in `MediaFallback` announced by screen readers.** The decorative `🖼️` / `🎥` icons were being read aloud (e.g. "frame with picture") because they had no `aria-hidden`. Added `aria-hidden="true"`; the descriptive text below remains accessible.
+- **`aria-label` added to progress bar.** `role="progressbar"` without an `aria-label` caused screen readers to announce it as "progressbar" with no context. Added `aria-label="Tour progress"`.
+
 ## [0.3.0] - 2026-03-27
 
 ### Added
@@ -45,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2024-03-19
 
 ### Added
+
 - Initial release of React Product Tour
 - Core tour functionality with step navigation
 - Multiple content types support (text, image, video, custom)
@@ -60,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Storybook documentation
 
 ### Features
+
 - Spotlight focus on target elements
 - Customizable styling and theming
 - Multiple content types support
@@ -73,9 +85,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Debounced event handlers
 
 ### Technical
+
 - Built with TypeScript
 - React 18+ support
 - Floating UI for positioning
 - Tailwind CSS for styling
 - Vitest for testing
-- Storybook for documentation 
+- Storybook for documentation

@@ -14,11 +14,11 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
   return (
-    <div className={`w-full h-1 rounded-full ${className}`} style={{ background: 'var(--tour--progress--background)' }}>
+    <div className={className} style={{ width: '100%', height: '0.25rem', borderRadius: '9999px', background: 'var(--tour--progress--background)' }}>
       <div
-        className="h-full rounded-full transition-all duration-300 ease-in-out"
-        style={{ width: `${progress}%`, background: 'var(--tour--progress--fill)' }}
+        style={{ width: `${progress}%`, height: '100%', borderRadius: '9999px', background: 'var(--tour--progress--fill)', transition: 'width 300ms ease-in-out' }}
         role="progressbar"
+        aria-label="Tour progress"
         aria-valuenow={progress}
         aria-valuemin={0}
         aria-valuemax={100}

@@ -1,6 +1,6 @@
 import React, { type ReactNode, useState, useEffect } from 'react';
 import { clsx } from 'clsx';
-import type { ContentType, MediaSource, ButtonConfig, ButtonLayoutConfig, ButtonRenderProps } from '../types';
+import type { ContentType, MediaSource, ButtonConfig, ButtonLayoutConfig, ButtonRenderProps, Placement } from '../types';
 import { ProgressBar } from './ProgressBar';
 import { MediaFallback } from './MediaFallback';
 import { ErrorBoundary } from './ErrorBoundary';
@@ -12,7 +12,7 @@ interface TourTooltipProps {
   /** Content to display in the tooltip */
   content: React.ReactNode | ContentType;
   /** Placement of the tooltip relative to the target */
-  placement: string;
+  placement: Placement;
   /** Animation type for the tooltip */
   animation?: 'slide' | 'bounce' | 'fade';
   /** Whether this is the first step */
@@ -307,7 +307,7 @@ export const TourTooltip: React.FC<TourTooltipProps> = ({
       {showProgress && currentStep !== undefined && totalSteps !== undefined && (
         <div className="tour-progress-section">
           <div className="tour-progress-header">
-            <span className="tour-step-counter" aria-hidden="true">
+            <span className="tour-step-counter">
               {`Step ${currentStep + 1} of ${totalSteps}`}
             </span>
           </div>
